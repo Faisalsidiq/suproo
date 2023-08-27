@@ -20,16 +20,16 @@ def main():
     st.write('Choose a tool from the options below.')
     st.write('Correlation tool selected')
     # Select pollutant columns (B to H) and meteorology columns (I to P)
-    pollutant_columns = data.columns[5:12]
-    meteorology_columns = data.columns[3:4]
+    pollutant_columns = df.columns[5:12]
+    meteorology_columns = df.columns[3:4]
     
     # Sidebar inputs
     selected_pollutant = st.sidebar.selectbox('Select Pollutant', pollutant_columns)
     selected_meteorology = st.sidebar.selectbox('Select Meteorology Data', meteorology_columns)
     
     # Start and end date inputs
-    start_date = st.sidebar.date_input('Start Date', min_value=data['date'].min().to_pydatetime().date(), max_value=data['date'].max().to_pydatetime().date(), value=data['Waktu'].min().to_pydatetime().date())
-    end_date = st.sidebar.date_input('End Date', min_value=data['date'].min().to_pydatetime().date(), max_value=data['date'].max().to_pydatetime().date(), value=data['Waktu'].min().to_pydatetime().date())
+    start_date = st.sidebar.date_input('Start Date', min_value=df['date'].min().to_pydatetime().date(), max_value=data['date'].max().to_pydatetime().date(), value=df['Waktu'].min().to_pydatetime().date())
+    end_date = st.sidebar.date_input('End Date', min_value=df['date'].min().to_pydatetime().date(), max_value=data['date'].max().to_pydatetime().date(), value=df['Waktu'].min().to_pydatetime().date())
     
     # Hour and minute range inputs
     start_hour = st.sidebar.selectbox('Start Hour', range(24), 0)
@@ -42,7 +42,7 @@ def main():
     end_datetime = datetime.combine(end_date, time(end_hour, end_minute))
     
     # Filter data based on selected date and time range
-    filtered_data = data[(data['date'] >= start_datetime) & (data['date'] <= end_datetime)]
+    filtered_data = data[(df['date'] >= start_datetime) & (df['date'] <= end_datetime)]
     
     # Create line plot for the correlation between selected pollutant and meteorology data using Plotly
     fig = make_subplots(specs=[[{"secondary_y": True}]])
