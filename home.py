@@ -28,8 +28,8 @@ def main():
     selected_meteorology = st.sidebar.selectbox('Select Meteorology Data', meteorology_columns)
     
     # Start and end date inputs
-    start_date = st.sidebar.date_input('Start Date', min_value=df['date'].min().to_pydatetime().date(), max_value=data['date'].max().to_pydatetime().date(), value=df['Waktu'].min().to_pydatetime().date())
-    end_date = st.sidebar.date_input('End Date', min_value=df['date'].min().to_pydatetime().date(), max_value=data['date'].max().to_pydatetime().date(), value=df['Waktu'].min().to_pydatetime().date())
+    start_date = st.sidebar.date_input('Start Date', min_value=df['date'].min().to_pydatetime().date(), max_value=df['date'].max().to_pydatetime().date(), value=df['Waktu'].min().to_pydatetime().date())
+    end_date = st.sidebar.date_input('End Date', min_value=df['date'].min().to_pydatetime().date(), max_value=df['date'].max().to_pydatetime().date(), value=df['Waktu'].min().to_pydatetime().date())
     
     # Hour and minute range inputs
     start_hour = st.sidebar.selectbox('Start Hour', range(24), 0)
