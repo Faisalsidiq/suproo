@@ -25,7 +25,7 @@ def main():
     selected_start_time = st.time_input("Start Time", value=pd.Timestamp("00:00:00").time())
     selected_end_time = st.time_input("End Time", value=pd.Timestamp("23:59:59").time())
 
-    st.write("Line Chart: Time vs. O3")
+    st.write("Line Chart: Time vs. Selected Columns")
 
     # Combine date and time for filtering
     start_datetime = pd.to_datetime(str(selected_start_date) + " " + str(selected_start_time))
@@ -35,8 +35,13 @@ def main():
     filtered_data = df[(pd.to_datetime(df['Date'] + ' ' + df['Time']) >= start_datetime) &
                        (pd.to_datetime(df['Date'] + ' ' + df['Time']) <= end_datetime)]
 
-    line_chart_data = filtered_data[["Time", "O3"]]
-    st.line_chart(line_chart_data.set_index('Time'))
+    # Column selection for line chart
+    available_columns = filtered_data.columns.tolist()
+    selected_columns = st.multiselect("Select Columns for Line Chart", available_columns)
+    
+    if selected_columns:
+        line_chart_data = filtered_data[selected_columns + ['Time']]
+        st.line_chart(line_chart_data.set_index('Time'))
 
 if __name__ == "__main__":
     main()
