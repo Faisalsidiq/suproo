@@ -14,7 +14,7 @@ def main():
     lottie_url = 'time.json'
     
     # Display Lottie animation using the st_lottie function
-    st_lottie(lottie_url, width=400, height=400)
+    st_lottie(lottie_url)
     
     # URL to the Google Sheets CSV export link
     csv_url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OSNeWA-McsX5Bxq8/export?format=csv"
