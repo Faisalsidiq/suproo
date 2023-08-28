@@ -16,9 +16,7 @@ latest_row = df.iloc[-1]
 m = folium.Map(
     location=[-7.783000, 110.410538],
     zoom_start=15,
-    width=800,
-    height=600
-)
+
 
 
 # Define a custom function to create a popup with data values
