@@ -37,3 +37,6 @@ st.title("Map with Latest Data Value")
 st.write("Click the blue marker to view the latest data from the CSV.")
 st.components.v1.html(folium_html)
 
+# Apply custom CSS style to adjust map frame size
+map_html = f'<div style="width: 800px; height: 600px;">{m.get_root().render()}</div>'
+st.markdown(map_html, unsafe_allow_html=True)
