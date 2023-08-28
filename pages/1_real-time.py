@@ -26,12 +26,14 @@ folium.Marker(
 map_html = m.get_root().render()
 
 # Set the frame size to 800x600 pixels using HTML
-st.markdown(f'<iframe srcdoc="{map_html}" width=800 height=600></iframe>', unsafe_allow_html=True)
+iframe = f'<iframe srcdoc="{map_html}" width=800 height=600></iframe>'
+st.markdown(iframe, unsafe_allow_html=True)
 
 # Display the latest value when the marker is clicked
 if st.button("Click to Load Latest Value"):
     st.write("Latest Value:")
     selected_column = st.selectbox("Select a column", df.columns[1:])
     st.write(f"{selected_column}: {latest_row[selected_column]}")
+
 
 
