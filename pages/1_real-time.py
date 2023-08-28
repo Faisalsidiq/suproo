@@ -20,7 +20,7 @@ def create_popup(row):
     popup = '<b>Date:</b> {}<br>'.format(row['Date_Time'])
     for column in df.columns[1:]:
         popup += '<b>{}:</b> {}<br>'.format(column, row[column])
-    return folium.Popup(popup, max_width=600)
+    return folium.Popup(popup, max_width=300)
 
 # Add a marker for the given latitude and longitude with the custom popup
 folium.Marker(
@@ -29,11 +29,12 @@ folium.Marker(
     icon=folium.Icon(color="blue"),
 ).add_to(m)
 
-# Display the map using Streamlit's map component
+# Convert the Folium map to HTML
+folium_html = m.get_root().render()
+
+# Display the Folium map in Streamlit using the 'st.components.v1.html' component
 st.title("Map with Latest Data Value")
 st.write("Click the blue marker to view the latest data from the CSV.")
-
-# Apply custom CSS style to adjust map frame size
-
+st.components.v1.html(folium_html)
 
 
