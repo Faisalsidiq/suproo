@@ -9,4 +9,5 @@ st_pages>=0.4.0
 streamlit-option-menu == 0.3.6
 folium>=0.13
 streamlit_folium==0.13.0
+lottie==0.7.0
 
