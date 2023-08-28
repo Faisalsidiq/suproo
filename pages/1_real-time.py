@@ -9,6 +9,9 @@ csv_url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OS
 df = pd.read_csv(csv_url, parse_dates=[['Date', 'Time']])
 df['Date_Time'] = pd.to_datetime(df['Date_Time'])
 
+# Get the latest row
+latest_row = df.iloc[-1]
+
 # Create a Folium map centered around the given latitude and longitude
 m = folium.Map(location=[-7.783000, 110.410538], zoom_start=15)
 
@@ -27,11 +30,10 @@ st.title("Map with Latest Data Value")
 st.write("Click the blue marker to load the latest value from the CSV.")
 st.components.v1.html(folium_html)
 
-# When the marker is clicked, display the latest value
+# When the marker is clicked, display the latest values for all columns
 if st.button("Click to Load Latest Value"):
-    st.write("Latest Value:")
-    selected_column = st.selectbox("Select a column", df.columns[1:])
-    latest_row = df.iloc[-1]
-    st.write(f"{selected_column}: {latest_row[selected_column]}")
+    st.write("Latest Values:")
+    for column in df.columns[1:]:
+        st.write(f"{column}: {latest_row[column]}")
 
 
