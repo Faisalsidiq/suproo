@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import folium
+from streamlit_folium import folium_static
 
 # URL to the Google Sheets CSV export link
 csv_url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OSNeWA-McsX5Bxq8/export?format=csv"
@@ -22,12 +23,8 @@ folium.Marker(
     icon=folium.Icon(color="blue"),
 ).add_to(m)
 
-# Convert the Folium map to HTML
-map_html = m.get_root().render()
-
-# Set the frame size to 800x600 pixels using HTML
-iframe = f'<iframe srcdoc="{map_html}" width=800 height=600></iframe>'
-st.markdown(iframe, unsafe_allow_html=True)
+# Convert the Folium map to an image
+folium_static(m, width=800, height=600)
 
 # Display the latest value when the marker is clicked
 if st.button("Click to Load Latest Value"):
