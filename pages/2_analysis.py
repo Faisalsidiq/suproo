@@ -1,42 +1,56 @@
 import streamlit as st
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
+from datetime import datetime, time
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 # URL to the Google Sheets CSV export link
 csv_url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OSNeWA-McsX5Bxq8/export?format=csv"
 # Load CSV data using pandas and parse date and time columns
 df = pd.read_csv(csv_url, parse_dates=[['Date', 'Time']])
-df['Date_Time'] = pd.to_datetime(df['Date_Time'])  # Ensure the Date_Time column is in datetime format
 
-# Sidebar options
-st.sidebar.header('Options')
-selected_date = st.sidebar.date_input('Select a date', df['Date_Time'].dt.date.min(), df['Date_Time'].dt.date.max())
-times_for_selected_date = df[df['Date_Time'].dt.date == selected_date]['Date_Time'].dt.time.unique()
-selected_time = st.sidebar.selectbox('Select a time', times_for_selected_date)
-selected_meteorology = st.sidebar.selectbox('Select meteorology column', df.select_dtypes(include=['number']).columns)
-selected_pollutant = st.sidebar.selectbox('Select pollutant column', df.select_dtypes(include=['number']).columns)
+# Display tools content
+st.title('Tools')
+st.write('Choose a tool from the options below.')
+st.write('Correlation tool selected')
+# Select pollutant columns (B to H) and meteorology columns (I to P)
+pollutant_columns = df.columns[2:9]  # Assuming pollutant columns start from index 2
+meteorology_columns = df.columns[9:]  # Assuming meteorology columns start from index 9
 
-# Filter data based on user selection
-filtered_df = df[(df['Date_Time'].dt.date == selected_date) & (df['Date_Time'].dt.time == selected_time)]
+# Sidebar inputs
+selected_pollutant = st.sidebar.selectbox('Select Pollutant', pollutant_columns)
+selected_meteorology = st.sidebar.selectbox('Select Meteorology Data', meteorology_columns)
 
-# Calculate correlation
-correlation = filtered_df[selected_meteorology].astype(float).corr(filtered_df[selected_pollutant].astype(float))
+# Start and end date inputs
+start_date = st.sidebar.date_input('Start Date', min_value=df['Date_Time'].min().date(), max_value=df['Date_Time'].max().date(), value=df['Date_Time'].min().date())
+end_date = st.sidebar.date_input('End Date', min_value=df['Date_Time'].min().date(), max_value=df['Date_Time'].max().date(), value=df['Date_Time'].max().date())
 
-# Main content
-st.title('Google Sheets Data Viewer')
-st.write('Selected Data:')
-st.write(f'Date: {selected_date}, Time: {selected_time}')
-st.write(f'Meteorology: {selected_meteorology}')
-st.write(f'Pollutant: {selected_pollutant}')
-st.write(filtered_df[[selected_meteorology, selected_pollutant]])
+# Hour and minute range inputs
+start_hour = st.sidebar.selectbox('Start Hour', range(24), 0)
+start_minute = st.sidebar.selectbox('Start Minute', range(0, 60, 30), 0, format_func=lambda x: f'{x:02d}')
+end_hour = st.sidebar.selectbox('End Hour', range(24), 23)
+end_minute = st.sidebar.selectbox('End Minute', range(0, 60, 30), 1, format_func=lambda x: f'{x:02d}')
 
-# Correlation line plot
-st.write('Correlation Line Plot:')
-plt.figure(figsize=(8, 6))
-sns.regplot(x=filtered_df[selected_meteorology].astype(float), y=filtered_df[selected_pollutant].astype(float))
-plt.xlabel(selected_meteorology)
-plt.ylabel(selected_pollutant)
-plt.title(f'Correlation: {correlation:.2f}')
-st.pyplot(plt)
+# Create start and end datetime objects
+start_datetime = datetime.combine(start_date, time(start_hour, start_minute))
+end_datetime = datetime.combine(end_date, time(end_hour, end_minute))
+
+# Filter data based on selected date and time range
+filtered_df = df[(df['Date_Time'] >= start_datetime) & (df['Date_Time'] <= end_datetime)]
+
+# Create line plot for the correlation between selected pollutant and meteorology data using Plotly
+fig = make_subplots(specs=[[{"secondary_y": True}]])
+fig.add_trace(go.Scatter(x=filtered_df['Date_Time'], y=filtered_df[selected_pollutant], mode='lines', name=selected_pollutant), secondary_y=False)
+fig.add_trace(go.Scatter(x=filtered_df['Date_Time'], y=filtered_df[selected_meteorology], mode='lines', name=selected_meteorology), secondary_y=True)
+
+# Update the layout with titles and y-axis labels
+fig.update_layout(
+    title=f'Correlation between {selected_pollutant} and {selected_meteorology}',
+    xaxis_title='Time',
+    yaxis=dict(title=selected_pollutant, side='left'),
+    yaxis2=dict(title=selected_meteorology, side='right')
+)
+
+# Display the correlation line plot
+st.plotly_chart(fig)
 
