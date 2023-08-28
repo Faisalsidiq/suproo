@@ -8,7 +8,11 @@ def main():
     # Load CSV data using pandas
     df = pd.read_csv(csv_url)
 
-  
+    # Create a button to display the DataFrame
+    if st.button("Show DataFrame"):
+        # Show the DataFrame using Streamlit
+        st.write("Loaded DataFrame:")
+        st.write(df)  # Display the DataFrame in the app
 
 if __name__ == "__main__":
     main()
