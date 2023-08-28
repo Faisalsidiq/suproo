@@ -1,5 +1,5 @@
 import streamlit as st
-import gspread
+import mumpy as np
 import pandas as pd
 
 
@@ -28,4 +28,11 @@ st.write(f'Meteorology: {selected_meteorology}')
 st.write(f'Pollutant: {selected_pollutant}')
 st.write(filtered_df[[selected_meteorology, selected_pollutant]])
 
-# Optionally, you can visualize the data using charts or plots here
+# Correlation line plot
+st.write('Correlation Line Plot:')
+plt.figure(figsize=(8, 6))
+sns.regplot(x=filtered_df[selected_meteorology].astype(float), y=filtered_df[selected_pollutant].astype(float))
+plt.xlabel(selected_meteorology)
+plt.ylabel(selected_pollutant)
+plt.title(f'Correlation: {correlation:.2f}')
+st.pyplot(plt)
