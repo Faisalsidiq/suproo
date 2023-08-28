@@ -3,6 +3,10 @@ import pandas as pd
 from streamlit_folium import folium_static
 import folium
 
+logo = "logo.png"
+# Display the logo image
+st.image(logo_path, width=200)  # Adjust the width as needed
+
 # URL to the Google Sheets CSV export link
 csv_url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OSNeWA-McsX5Bxq8/export?format=csv"
 
