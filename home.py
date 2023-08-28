@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from lottie_component import LottieAnimation
+from streamlit_lottie import st_lottie
 
 def main():
 
@@ -8,7 +8,15 @@ def main():
     # Display the logo image
     st.image(logo, width=200)  # Adjust the width as needed
 
-        # Render the Lottie animation
+    st.title("Air Polution Pattern Monitoring System")
+
+    # URL to the Lottie animation JSON file
+    lottie_url = "https://assets6.lottiefiles.com/packages/lf20_v50cqj.json"
+    
+    st.title("Lottie Animation Example")
+    
+    # Display Lottie animation using the st_lottie function
+    st_lottie(url=lottie_url, width=400, height=400)
     
     # URL to the Google Sheets CSV export link
     csv_url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OSNeWA-McsX5Bxq8/export?format=csv"
