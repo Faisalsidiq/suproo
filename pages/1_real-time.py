@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import folium
-from streamlit_folium import folium_static
 
 # URL to the Google Sheets CSV export link
 csv_url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OSNeWA-McsX5Bxq8/export?format=csv"
@@ -20,10 +19,13 @@ folium.Marker(
     icon=folium.Icon(color="blue"),
 ).add_to(m)
 
-# Display the Folium map using the streamlit_folium plugin
+# Convert the Folium map to HTML
+folium_html = m.get_root().render()
+
+# Display the Folium map in Streamlit using the 'st.components.v1.html' component
 st.title("Map with Latest Data Value")
 st.write("Click the blue marker to load the latest value from the CSV.")
-folium_static(m)
+st.components.v1.html(folium_html)
 
 # When the marker is clicked, display the latest value
 if st.button("Click to Load Latest Value"):
