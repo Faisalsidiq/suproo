@@ -15,10 +15,17 @@ latest_row = df.iloc[-1]
 # Create a Folium map centered around the given latitude and longitude
 m = folium.Map(location=[-7.783000, 110.410538], zoom_start=15)
 
-# Add a marker for the given latitude and longitude
+# Define a custom function to create a popup with data values
+def create_popup(row):
+    popup = '<b>Date:</b> {}<br>'.format(row['Date_Time'])
+    for column in df.columns[1:]:
+        popup += '<b>{}:</b> {}<br>'.format(column, row[column])
+    return folium.Popup(popup, max_width=300)
+
+# Add a marker for the given latitude and longitude with the custom popup
 folium.Marker(
     location=[-7.783000, 110.410538],
-    popup="Click here to load latest value",
+    popup=create_popup(latest_row),
     icon=folium.Icon(color="blue"),
 ).add_to(m)
 
@@ -27,13 +34,7 @@ folium_html = m.get_root().render()
 
 # Display the Folium map in Streamlit using the 'st.components.v1.html' component
 st.title("Map with Latest Data Value")
-st.write("Click the blue marker to load the latest value from the CSV.")
+st.write("Click the blue marker to view the latest data from the CSV.")
 st.components.v1.html(folium_html)
-
-# When the marker is clicked, display the latest values for all columns
-if st.button("Click to Load Latest Value"):
-    st.write("Latest Values:")
-    for column in df.columns[1:]:
-        st.write(f"{column}: {latest_row[column]}")
 
 
