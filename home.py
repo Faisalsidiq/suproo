@@ -9,10 +9,6 @@ def main():
     st.image(logo, width=200)  # Adjust the width as needed
 
         # Render the Lottie animation
-
-    lottie_path = "time.json"  # Replace with the path to your Lottie JSON file
-    lottie = LottieAnimation(lottie_path, speed=1, loop=True, autoplay=True)
-    lottie.render()
     
     # URL to the Google Sheets CSV export link
     csv_url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OSNeWA-McsX5Bxq8/export?format=csv"
