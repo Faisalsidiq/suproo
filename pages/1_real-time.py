@@ -12,8 +12,17 @@ df['Date_Time'] = pd.to_datetime(df['Date_Time'])
 # Get the latest row
 latest_row = df.iloc[-1]
 
+# Specify the width and height of the map
+map_width = 800  # Adjust this value as needed
+map_height = 600  # Adjust this value as needed
+
 # Create a Folium map centered around the given latitude and longitude
-m = folium.Map(location=[-7.783000, 110.410538], zoom_start=15)
+m = folium.Map(
+    location=[-7.783000, 110.410538],
+    zoom_start=15,
+    width=map_width,
+    height=map_height
+)
 
 # Define a custom function to create a popup with data values
 def create_popup(row):
@@ -36,5 +45,4 @@ folium_html = m.get_root().render()
 st.title("Map with Latest Data Value")
 st.write("Click the blue marker to view the latest data from the CSV.")
 st.components.v1.html(folium_html)
-
 
