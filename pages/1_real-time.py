@@ -17,11 +17,12 @@ latest_row = df.iloc[-1]
 m = folium.Map(location=[-7.783000, 110.410538], zoom_start=15)
 
 # Add a marker for the given latitude and longitude
-folium.Marker(
+marker = folium.Marker(
     location=[-7.783000, 110.410538],
     popup="Click here to load latest value",
     icon=folium.Icon(color="blue"),
-).add_to(m)
+)
+marker.add_to(m)
 
 # Convert the Folium map to HTML
 folium_html = m.get_root().render()
@@ -32,7 +33,9 @@ st.write("Click the blue marker to load the latest value from the CSV.")
 html(folium_html, height=500)  # Display the Folium map
 
 # When the marker is clicked, display the latest value
-if st.button("Click to Load Latest Value"):
-    st.write("Latest Value:")
-    selected_column = st.selectbox("Select a column", df.columns[1:])
-    st.write(f"{selected_column}: {latest_row[selected_column]}")
+if marker.get_name() in st._widget_to_ctx:
+    ctx = st._widget_to_ctx[marker.get_name()]
+    if ctx.triggered:
+        st.write("Latest Value:")
+        selected_column = st.selectbox("Select a column", df.columns[1:])
+        st.write(f"{selected_column}: {latest_row[selected_column]}")
