@@ -7,10 +7,11 @@ import matplotlib.pyplot as plt
 csv_url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OSNeWA-McsX5Bxq8/export?format=csv"
 # Load CSV data using pandas and parse date and time columns
 df = pd.read_csv(csv_url, parse_dates=[['Date', 'Time']])
+df['Date_Time'] = pd.to_datetime(df['Date_Time'])  # Ensure the Date_Time column is in datetime format
 
 # Sidebar options
 st.sidebar.header('Options')
-selected_date = st.sidebar.date_input('Select a date', df['Date_Time'].dt.date.unique())
+selected_date = st.sidebar.date_input('Select a date', df['Date_Time'].dt.date.min(), df['Date_Time'].dt.date.max())
 times_for_selected_date = df[df['Date_Time'].dt.date == selected_date]['Date_Time'].dt.time.unique()
 selected_time = st.sidebar.selectbox('Select a time', times_for_selected_date)
 selected_meteorology = st.sidebar.selectbox('Select meteorology column', ['Temperature', 'Humidity'])
