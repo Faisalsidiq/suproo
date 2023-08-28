@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from streamlit_folium import folium_static
 import folium
 
 # URL to the Google Sheets CSV export link
@@ -30,5 +31,6 @@ if st.button("Click to Load Latest Value"):
     st.write("Latest Value:")
     selected_column = st.selectbox("Select a column", df.columns[1:])
     st.write(f"{selected_column}: {latest_row[selected_column]}")
+
 
 
