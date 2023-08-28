@@ -3,16 +3,18 @@ import gspread
 import pandas as pd
 
 
+# URL to the Google Sheets CSV export link
+csv_url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OSNeWA-McsX5Bxq8/export?format=csv"
+# Load CSV data using pandas
+df = pd.read_csv(csv_url)
 
-df = pd.DataFrame(data, columns=data[0])
-df = df[1:]  # Exclude the header row
 
 # Sidebar options
 st.sidebar.header('Options')
 selected_date = st.sidebar.date_input('Select a date', pd.to_datetime(df['Date']).dt.date.unique())
 selected_time = st.sidebar.selectbox('Select a time', pd.to_datetime(df['Time']).dt.time.unique())
 selected_meteorology = st.sidebar.selectbox('Select meteorology column', ['Temperature', 'Humidity'])
-selected_pollutant = st.sidebar.selectbox('Select pollutant column', ['Pollutant 1', 'Pollutant 2', 'Pollutant 3'])
+selected_pollutant = st.sidebar.selectbox('Select pollutant column', ['SO2', 'CO', 'O3', 'NO2', 'HC' 'PM1p0', 'PM2p5', 'PM10'])
 
 # Filter data based on user selection
 filtered_df = df[(pd.to_datetime(df['Date']).dt.date == selected_date) & 
