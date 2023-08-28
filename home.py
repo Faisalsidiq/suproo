@@ -8,7 +8,7 @@ def main():
     # Display the logo image
     st.image(logo, width=200)  # Adjust the width as needed
 
-    st.title("Air Polution Pattern Monitoring System")
+    st.title("Air Pollution Pattern Monitoring System")
 
     # URL to the Lottie animation JSON file
     lottie_url = "time.json"
@@ -16,7 +16,7 @@ def main():
     st.title("Lottie Animation Example")
     
     # Display Lottie animation using the st_lottie function
-    st_lottie(url=lottie_url, width=400, height=400)
+    st_lottie(lottie_url, width=400, height=400)
     
     # URL to the Google Sheets CSV export link
     csv_url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OSNeWA-McsX5Bxq8/export?format=csv"
@@ -29,8 +29,6 @@ def main():
         # Show the DataFrame using Streamlit
         st.write("Loaded DataFrame:")
         st.write(df)  # Display the DataFrame in the app
-
-
 
 if __name__ == "__main__":
     main()
