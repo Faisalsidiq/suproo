@@ -11,7 +11,7 @@ def main():
     st.title("Air Polution Pattern Monitoring System")
 
     # URL to the Lottie animation JSON file
-    lottie_url = "https://assets6.lottiefiles.com/packages/lf20_v50cqj.json"
+    lottie_url = "time.json"
     
     st.title("Lottie Animation Example")
     
