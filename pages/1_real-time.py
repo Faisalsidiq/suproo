@@ -41,8 +41,9 @@ folium.Marker(
 # Convert the Folium map to HTML
 folium_html = m.get_root().render()
 
-# Display the Folium map in Streamlit using the 'st.components.v1.html' component
+# Create a frame around the map using st.markdown
+frame_style = f"width: {map_width}px; height: {map_height}px; border: 1px solid black;"
 st.title("Map with Latest Data Value")
 st.write("Click the blue marker to view the latest data from the CSV.")
-st.components.v1.html(folium_html)
+st.markdown(f'<div style="{frame_style}">{folium_html}</div>', unsafe_allow_html=True)
 
