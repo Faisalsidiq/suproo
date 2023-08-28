@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import folium
-from streamlit_folium import folium_static
 
 # URL to the Google Sheets CSV export link
 csv_url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OSNeWA-McsX5Bxq8/export?format=csv"
@@ -23,14 +22,13 @@ folium.Marker(
     icon=folium.Icon(color="blue"),
 ).add_to(m)
 
-# Convert the Folium map to an image
-folium_static(m, width=800, height=600)
+# Display the map
+folium_static(m)
 
-# Display the latest value when the marker is clicked
+# When the marker is clicked, display the latest value
 if st.button("Click to Load Latest Value"):
     st.write("Latest Value:")
     selected_column = st.selectbox("Select a column", df.columns[1:])
     st.write(f"{selected_column}: {latest_row[selected_column]}")
-
 
 
