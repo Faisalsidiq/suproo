@@ -33,13 +33,5 @@ folium.Marker(
 # Display the map
 folium_static(m)
 
-# When the marker is clicked, display the custom popup
-if m.get_name() in st._widget_to_ctx:
-    marker = st._widget_to_ctx[m.get_name()].map_children[0]
-    if marker.get_name() in st._widget_to_ctx:
-        clicked = st._widget_to_ctx[marker.get_name()].button("Click to Load Latest Value")
-        if clicked:
-            st.write("Latest Value:")
-            selected_column = st.selectbox("Select a column", df.columns[1:])
-            st.write(f"{selected_column}: {latest_row[selected_column]}")
+
 
