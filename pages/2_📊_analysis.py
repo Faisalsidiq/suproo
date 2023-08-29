@@ -9,6 +9,16 @@ csv_url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OS
 # Load CSV data using pandas and parse date and time columns
 df = pd.read_csv(csv_url, parse_dates=[['Date', 'Time']])
 
+# Preprocess function to replace #NUM! values with random integers
+def preprocess_value(value):
+    if value == '#NUM!':
+        return random.randint(0, 100)
+    return value
+
+# Apply preprocessing function to the entire DataFrame
+df = df.applymap(preprocess_value)
+
+
 # Display tools content
 st.title('Tools')
 st.write('Choose a tool from the options below.')
