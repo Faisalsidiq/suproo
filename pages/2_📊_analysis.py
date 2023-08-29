@@ -22,45 +22,80 @@ df = df.applymap(preprocess_value)
 
 # Display tools content
 st.title('Tools')
-st.write('Choose a tool from the options below.')
-st.write('Correlation tool selected')
-# Select pollutant columns (B to H) and meteorology columns (I to P)
-pollutant_columns = df.columns[3:12]  # Assuming pollutant columns start from index 2
-meteorology_columns = df.columns[1:3]  # Assuming meteorology columns start from index 9
+# Sidebar options
+selected_tool = st.selectbox('Select Tool', ['Correlation', 'Statistics'])
 
-# Sidebar inputs
-selected_pollutant = st.sidebar.selectbox('Select Pollutant', pollutant_columns)
-selected_meteorology = st.sidebar.selectbox('Select Meteorology Data', meteorology_columns)
+if selected_tool == 'Correlation':
+    st.write('Correlation tool selected')
+    # Select pollutant columns (B to H) and meteorology columns (I to P)
+    pollutant_columns = df.columns[3:12]  # Assuming pollutant columns start from index 2
+    meteorology_columns = df.columns[1:3]  # Assuming meteorology columns start from index 9
+    
+    # Sidebar inputs
+    selected_pollutant = st.sidebar.selectbox('Select Pollutant', pollutant_columns)
+    selected_meteorology = st.sidebar.selectbox('Select Meteorology Data', meteorology_columns)
+    
+    # Start and end date inputs
+    start_date = st.sidebar.date_input('Start Date', min_value=df['Date_Time'].min().date(), max_value=df['Date_Time'].max().date(), value=df['Date_Time'].min().date())
+    end_date = st.sidebar.date_input('End Date', min_value=df['Date_Time'].min().date(), max_value=df['Date_Time'].max().date(), value=df['Date_Time'].max().date())
+    
+    # Hour and minute range inputs
+    start_hour = st.sidebar.selectbox('Start Hour', range(24), 0)
+    start_minute = st.sidebar.selectbox('Start Minute', range(0, 60, 30), 0, format_func=lambda x: f'{x:02d}')
+    end_hour = st.sidebar.selectbox('End Hour', range(24), 23)
+    end_minute = st.sidebar.selectbox('End Minute', range(0, 60, 30), 1, format_func=lambda x: f'{x:02d}')
+    
+    # Create start and end datetime objects
+    start_datetime = datetime.combine(start_date, time(start_hour, start_minute))
+    end_datetime = datetime.combine(end_date, time(end_hour, end_minute))
+    
+    # Filter data based on selected date and time range
+    filtered_df = df[(df['Date_Time'] >= start_datetime) & (df['Date_Time'] <= end_datetime)]
+    
+    # Create line plot for the correlation between selected pollutant and meteorology data using Plotly
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+    fig.add_trace(go.Scatter(x=filtered_df['Date_Time'], y=filtered_df[selected_pollutant], mode='lines', name=selected_pollutant), secondary_y=False)
+    fig.add_trace(go.Scatter(x=filtered_df['Date_Time'], y=filtered_df[selected_meteorology], mode='lines', name=selected_meteorology), secondary_y=True)
+    
+    # Update the layout with titles and y-axis labels
+    fig.update_layout(
+        title=f'Correlation between {selected_pollutant} and {selected_meteorology}',
+        xaxis_title='Time',
+        yaxis=dict(title=selected_pollutant, side='left'),
+        yaxis2=dict(title=selected_meteorology, side='right')
+    )
+    
+    # Display the correlation line plot
+    st.plotly_chart(fig)
+    
+    # Sidebar options
+    selected_tool = st.selectbox('Select Tool', ['Correlation', 'Statistics'])
+    
+    if selected_tool == 'Correlation':
+        st.write('Correlation tool selected')
 
-# Start and end date inputs
-start_date = st.sidebar.date_input('Start Date', min_value=df['Date_Time'].min().date(), max_value=df['Date_Time'].max().date(), value=df['Date_Time'].min().date())
-end_date = st.sidebar.date_input('End Date', min_value=df['Date_Time'].min().date(), max_value=df['Date_Time'].max().date(), value=df['Date_Time'].max().date())
-
-# Hour and minute range inputs
-start_hour = st.sidebar.selectbox('Start Hour', range(24), 0)
-start_minute = st.sidebar.selectbox('Start Minute', range(0, 60, 30), 0, format_func=lambda x: f'{x:02d}')
-end_hour = st.sidebar.selectbox('End Hour', range(24), 23)
-end_minute = st.sidebar.selectbox('End Minute', range(0, 60, 30), 1, format_func=lambda x: f'{x:02d}')
-
-# Create start and end datetime objects
-start_datetime = datetime.combine(start_date, time(start_hour, start_minute))
-end_datetime = datetime.combine(end_date, time(end_hour, end_minute))
-
-# Filter data based on selected date and time range
-filtered_df = df[(df['Date_Time'] >= start_datetime) & (df['Date_Time'] <= end_datetime)]
-
-# Create line plot for the correlation between selected pollutant and meteorology data using Plotly
-fig = make_subplots(specs=[[{"secondary_y": True}]])
-fig.add_trace(go.Scatter(x=filtered_df['Date_Time'], y=filtered_df[selected_pollutant], mode='lines', name=selected_pollutant), secondary_y=False)
-fig.add_trace(go.Scatter(x=filtered_df['Date_Time'], y=filtered_df[selected_meteorology], mode='lines', name=selected_meteorology), secondary_y=True)
-
-# Update the layout with titles and y-axis labels
-fig.update_layout(
-    title=f'Correlation between {selected_pollutant} and {selected_meteorology}',
-    xaxis_title='Time',
-    yaxis=dict(title=selected_pollutant, side='left'),
-    yaxis2=dict(title=selected_meteorology, side='right')
-)
-
-# Display the correlation line plot
-st.plotly_chart(fig)
+elif selected_tool == 'Statistics':
+    st.write('Statistics tool selected')
+    
+    # Option to show date and time with highest and lowest values of selected pollutant
+    show_extremes = st.sidebar.checkbox('Show Date and Time with Extremes')
+    if show_extremes:
+        max_value_time = df[df[selected_pollutant] == df[selected_pollutant].max()]['Date_Time'].values[0]
+        min_value_time = df[df[selected_pollutant] == df[selected_pollutant].min()]['Date_Time'].values[0]
+        st.write("Date and Time with Highest Value:", max_value_time)
+        st.write("Date and Time with Lowest Value:", min_value_time)
+        show_mean_bar_plot = st.sidebar.checkbox('Show Mean Bar Plot')
+        
+    if show_mean_bar_plot:
+        mean_values = df[pollutant_columns].mean()
+        fig_mean = go.Figure(data=[go.Bar(x=mean_values.index, y=mean_values.values)])
+        fig_mean.update_layout(title='Mean Values of Pollutants', xaxis_title='Pollutants', yaxis_title='Mean Value')
+        st.plotly_chart(fig_mean)
+    
+    # Option to show bar plot of mode of all pollutants
+    show_mode_bar_plot = st.sidebar.checkbox('Show Mode Bar Plot')
+    if show_mode_bar_plot:
+        mode_values = df[pollutant_columns].mode().iloc[0]
+        fig_mode = go.Figure(data=[go.Bar(x=mode_values.index, y=mode_values.values)])
+        fig_mode.update_layout(title='Mode Values of Pollutants', xaxis_title='Pollutants', yaxis_title='Mode Value')
+        st.plotly_chart(fig_mode)
