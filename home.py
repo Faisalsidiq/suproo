@@ -26,7 +26,12 @@ def main():
         elif value == "#NUM!":
             return random.randint(0, 100)  # Replace #NUM! with a random number between 0 and 100
         else:
-            return value
+            # Handle values with commas as decimal separators
+            cleaned_value = re.sub(r'"|,', '.', value)  # Replace commas with periods
+            try:
+                return float(cleaned_value)  # Convert to float
+            except ValueError:
+                return value  # Return original value if conversion fails
     
     # Apply the preprocessing function to the entire DataFrame
     df_processed = df.applymap(preprocess_value)
