@@ -3,32 +3,19 @@ import pandas as pd
 from datetime import datetime, time
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-import random
-
-logo = "logo.png"
-# Display the logo image
-st.image(logo, width=200)  # Adjust the width as needed
 
 # URL to the Google Sheets CSV export link
 csv_url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OSNeWA-McsX5Bxq8/export?format=csv"
 # Load CSV data using pandas and parse date and time columns
 df = pd.read_csv(csv_url, parse_dates=[['Date', 'Time']])
 
-# Preprocess function to replace #NUM! values with random integers
-def preprocess_value(value):
-    if value == '#NUM!':
-        return random.randint(0, 100)
-    return value
-
-# Apply preprocessing function to the entire DataFrame
-df = df.applymap(preprocess_value)
-
 # Display tools content
-st.title('Analysis Tools')
-
+st.title('Tools')
+st.write('Choose a tool from the options below.')
+st.write('Correlation tool selected')
 # Select pollutant columns (B to H) and meteorology columns (I to P)
-pollutant_columns = df.columns[2:10]  # Assuming pollutant columns start from index 2
-meteorology_columns = df.columns[10:]  # Assuming meteorology columns start from index 10
+pollutant_columns = df.columns[2:9]  # Assuming pollutant columns start from index 2
+meteorology_columns = df.columns[9:]  # Assuming meteorology columns start from index 9
 
 # Sidebar inputs
 selected_pollutant = st.sidebar.selectbox('Select Pollutant', pollutant_columns)
@@ -66,11 +53,3 @@ fig.update_layout(
 
 # Display the correlation line plot
 st.plotly_chart(fig)
-
-# Calculate the correlation coefficient between the selected pollutant and meteorology data
-if selected_meteorology in filtered_df.columns:
-    correlation_coefficient = filtered_df[[selected_pollutant, selected_meteorology]].corr().iloc[0, 1]
-    st.write("Correlation Coefficient:", correlation_coefficient)
-else:
-    st.write(f"Selected meteorology data '{selected_meteorology}' is not available in the filtered data.")
-
