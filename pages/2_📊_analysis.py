@@ -75,7 +75,29 @@ elif selected_tool == 'Statistics':
 
 elif selected_tool == 'Statistics':
     st.write('Statistics tool selected')
+    pollutant_columns = df.columns[3:12]  # Assuming pollutant columns start from index 2
+    meteorology_columns = df.columns[1:3]  # Assuming meteorology columns start from index 9
     
+    # Sidebar inputs
+    selected_pollutant = st.sidebar.selectbox('Select Pollutant', pollutant_columns, key='corr_pollutant')
+    selected_meteorology = st.sidebar.selectbox('Select Meteorology Data', meteorology_columns, key='corr_meteorology')
+    
+    # Start and end date inputs
+    start_date = st.sidebar.date_input('Start Date', min_value=df['Date_Time'].min().date(), max_value=df['Date_Time'].max().date(), value=df['Date_Time'].min().date())
+    end_date = st.sidebar.date_input('End Date', min_value=df['Date_Time'].min().date(), max_value=df['Date_Time'].max().date(), value=df['Date_Time'].max().date())
+    
+    # Hour and minute range inputs
+    start_hour = st.sidebar.selectbox('Start Hour', range(24), 0, key='corr_start_hour')
+    start_minute = st.sidebar.selectbox('Start Minute', range(0, 60, 30), 0, format_func=lambda x: f'{x:02d}', key='corr_start_minute')
+    end_hour = st.sidebar.selectbox('End Hour', range(24), 23, key='corr_end_hour')
+    end_minute = st.sidebar.selectbox('End Minute', range(0, 60, 30), 1, format_func=lambda x: f'{x:02d}', key='corr_end_minute')
+    
+    # Create start and end datetime objects
+    start_datetime = datetime.combine(start_date, time(start_hour, start_minute))
+    end_datetime = datetime.combine(end_date, time(end_hour, end_minute))
+    
+    # Filter data based on selected date and time range
+    filtered_df = df[(df['Date_Time'] >= start_datetime) & (df['Date_Time'] <= end_datetime)]
     # Option to show date and time with highest and lowest values of selected pollutant
     show_extremes = st.sidebar.checkbox('Show Date and Time with Extremes')
     if show_extremes:
