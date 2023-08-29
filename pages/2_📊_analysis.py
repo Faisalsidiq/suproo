@@ -66,6 +66,7 @@ if selected_tool == 'Correlation':
     
     # Display the correlation line plot
     st.plotly_chart(fig)
+
     
 elif selected_tool == 'Statistics':
     st.write('Statistics tool selected')
