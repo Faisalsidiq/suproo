@@ -15,7 +15,7 @@ st.write('Choose a tool from the options below.')
 st.write('Correlation tool selected')
 # Select pollutant columns (B to H) and meteorology columns (I to P)
 pollutant_columns = df.columns[3:12]  # Assuming pollutant columns start from index 2
-meteorology_columns = df.columns[2:3]  # Assuming meteorology columns start from index 9
+meteorology_columns = df.columns[1:3]  # Assuming meteorology columns start from index 9
 
 # Sidebar inputs
 selected_pollutant = st.sidebar.selectbox('Select Pollutant', pollutant_columns)
