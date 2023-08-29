@@ -27,8 +27,8 @@ df = df.applymap(preprocess_value)
 st.title('Analysis Tools')
 
 # Select pollutant columns (B to H) and meteorology columns (I to P)
-pollutant_columns = df.columns[3:11]  # Assuming pollutant columns start from index 2
-meteorology_columns = df.columns[1:3]  # Assuming meteorology columns start from index 9
+pollutant_columns = df.columns[2:10]  # Assuming pollutant columns start from index 2
+meteorology_columns = df.columns[10:]  # Assuming meteorology columns start from index 10
 
 # Sidebar inputs
 selected_pollutant = st.sidebar.selectbox('Select Pollutant', pollutant_columns)
@@ -68,7 +68,8 @@ fig.update_layout(
 st.plotly_chart(fig)
 
 # Calculate the correlation coefficient between the selected pollutant and meteorology data
-correlation_coefficient = filtered_data[[selected_pollutant, selected_meteorology]].corr().iloc[0, 1]
-        
+correlation_coefficient = filtered_df[[selected_pollutant, selected_meteorology]].corr().iloc[0, 1]
+
 # Display the correlation coefficient
 st.write("Correlation Coefficient:", correlation_coefficient)
+
