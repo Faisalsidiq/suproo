@@ -67,3 +67,8 @@ fig.update_layout(
 # Display the correlation line plot
 st.plotly_chart(fig)
 
+# Calculate the correlation coefficient between the selected pollutant and meteorology data
+correlation_coefficient = filtered_data[[selected_pollutant, selected_meteorology]].corr().iloc[0, 1]
+        
+# Display the correlation coefficient
+st.write("Correlation Coefficient:", correlation_coefficient)
