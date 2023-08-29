@@ -7,6 +7,8 @@ logo = "logo.png"
 # Display the logo image
 st.image(logo, width=200)  # Adjust the width as needed
 
+st.title("Real-time Air Pollution Monitoring")
+
 # URL to the Google Sheets CSV export link
 csv_url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OSNeWA-McsX5Bxq8/export?format=csv"
 
