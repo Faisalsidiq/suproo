@@ -19,6 +19,9 @@ def preprocess_value(value):
 # Apply preprocessing function to the entire DataFrame
 df = df.applymap(preprocess_value)
 
+# Move filtered_df definition here to ensure it's defined before use
+filtered_df = df
+
 # Display tools content
 st.title('Tools')
 # Sidebar options
