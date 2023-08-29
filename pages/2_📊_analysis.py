@@ -3,6 +3,7 @@ import pandas as pd
 from datetime import datetime, time
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import random
 
 # URL to the Google Sheets CSV export link
 csv_url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OSNeWA-McsX5Bxq8/export?format=csv"
