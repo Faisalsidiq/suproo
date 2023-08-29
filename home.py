@@ -3,6 +3,7 @@ import pandas as pd
 from streamlit_lottie import st_lottie
 import json
 import requests
+import random
 
 def main():
 
@@ -11,12 +12,6 @@ def main():
     st.image(logo, width=200)  # Adjust the width as needed
 
     st.title("Air Pollution Pattern Monitoring System")
-
-    # URL to the Lottie animation JSON file
-    lottie_url = "time.json"
-    
-    # Display Lottie animation using the st_lottie function
-    st_lottie(lottie_url)
     
     # URL to the Google Sheets CSV export link
     csv_url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OSNeWA-McsX5Bxq8/export?format=csv"
@@ -24,15 +19,17 @@ def main():
     # Load CSV data using pandas
     df = pd.read_csv(csv_url)
 
-    # Define a function to preprocess cells with numeric values
-    def preprocess_numeric(value):
+    # Define a function to preprocess cells with numeric values or #NUM!
+    def preprocess_value(value):
         if isinstance(value, (int, float)):
-            return value * 2  # Perform some operation on the numeric value
+            return value  # Leave numeric values as they are
+        elif value == "#NUM!":
+            return random.randint(0, 100)  # Replace #NUM! with a random number between 0 and 100
         else:
             return value
     
     # Apply the preprocessing function to the entire DataFrame
-    df_processed = df.applymap(preprocess_numeric)
+    df_processed = df.applymap(preprocess_value)
     
     # Display the preprocessed DataFrame
     print(df_processed)
