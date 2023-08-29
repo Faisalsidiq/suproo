@@ -44,7 +44,7 @@ def main():
     if st.button("Show DataFrame"):
         # Show the DataFrame using Streamlit
         st.write("Loaded DataFrame:")
-        st.write(df)  # Display the DataFrame in the app
+        st.write(df_processed)  # Display the DataFrame in the app
 
 if __name__ == "__main__":
     main()
