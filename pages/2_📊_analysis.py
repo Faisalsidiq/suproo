@@ -19,7 +19,6 @@ def preprocess_value(value):
 # Apply preprocessing function to the entire DataFrame
 df = df.applymap(preprocess_value)
 
-
 # Display tools content
 st.title('Tools')
 # Sidebar options
@@ -32,18 +31,18 @@ if selected_tool == 'Correlation':
     meteorology_columns = df.columns[1:3]  # Assuming meteorology columns start from index 9
     
     # Sidebar inputs
-    selected_pollutant = st.sidebar.selectbox('Select Pollutant', pollutant_columns)
-    selected_meteorology = st.sidebar.selectbox('Select Meteorology Data', meteorology_columns)
+    selected_pollutant = st.sidebar.selectbox('Select Pollutant', pollutant_columns, key='corr_pollutant')
+    selected_meteorology = st.sidebar.selectbox('Select Meteorology Data', meteorology_columns, key='corr_meteorology')
     
     # Start and end date inputs
     start_date = st.sidebar.date_input('Start Date', min_value=df['Date_Time'].min().date(), max_value=df['Date_Time'].max().date(), value=df['Date_Time'].min().date())
     end_date = st.sidebar.date_input('End Date', min_value=df['Date_Time'].min().date(), max_value=df['Date_Time'].max().date(), value=df['Date_Time'].max().date())
     
     # Hour and minute range inputs
-    start_hour = st.sidebar.selectbox('Start Hour', range(24), 0)
-    start_minute = st.sidebar.selectbox('Start Minute', range(0, 60, 30), 0, format_func=lambda x: f'{x:02d}')
-    end_hour = st.sidebar.selectbox('End Hour', range(24), 23)
-    end_minute = st.sidebar.selectbox('End Minute', range(0, 60, 30), 1, format_func=lambda x: f'{x:02d}')
+    start_hour = st.sidebar.selectbox('Start Hour', range(24), 0, key='corr_start_hour')
+    start_minute = st.sidebar.selectbox('Start Minute', range(0, 60, 30), 0, format_func=lambda x: f'{x:02d}', key='corr_start_minute')
+    end_hour = st.sidebar.selectbox('End Hour', range(24), 23, key='corr_end_hour')
+    end_minute = st.sidebar.selectbox('End Minute', range(0, 60, 30), 1, format_func=lambda x: f'{x:02d}', key='corr_end_minute')
     
     # Create start and end datetime objects
     start_datetime = datetime.combine(start_date, time(start_hour, start_minute))
@@ -68,11 +67,11 @@ if selected_tool == 'Correlation':
     # Display the correlation line plot
     st.plotly_chart(fig)
     
-    # Sidebar options
-    selected_tool = st.selectbox('Select Tool', ['Correlation', 'Statistics'])
+elif selected_tool == 'Statistics':
+    st.write('Statistics tool selected')
     
-    if selected_tool == 'Correlation':
-        st.write('Correlation tool selected')
+    # ... (rest of your statistics tool code)
+
 
 elif selected_tool == 'Statistics':
     st.write('Statistics tool selected')
