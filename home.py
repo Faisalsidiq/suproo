@@ -24,6 +24,19 @@ def main():
     # Load CSV data using pandas
     df = pd.read_csv(csv_url)
 
+    # Define a function to preprocess cells with numeric values
+    def preprocess_numeric(value):
+        if isinstance(value, (int, float)):
+            return value * 2  # Perform some operation on the numeric value
+        else:
+            return value
+    
+    # Apply the preprocessing function to the entire DataFrame
+    df_processed = df.applymap(preprocess_numeric)
+    
+    # Display the preprocessed DataFrame
+    print(df_processed)
+
     # Create a button to display the DataFrame
     if st.button("Show DataFrame"):
         # Show the DataFrame using Streamlit
