@@ -13,7 +13,7 @@ def main():
     st.image(logo, width=200)  # Adjust the width as needed
 
     st.title("Air Pollution Pattern Monitoring System")
-    st.subheading('Aksi Sementara menjadi "Aksi Berkelanjutan"')
+    st.subheader('Aksi Sementara menjadi "Aksi Berkelanjutan"')
 
     
     # URL to the Google Sheets CSV export link
