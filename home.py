@@ -12,8 +12,8 @@ def main():
     # Display the logo image
     st.image(logo, width=200)  # Adjust the width as needed
 
-    st.title("Air Pollution Pattern Monitoring System")
-    st.subheader('Aksi Sementara menjadi "Aksi Berkelanjutan"')
+    st.title("Airen")
+    st.subheader('Air Pattern Monitoring System: Aksi Sementara menjadi "Aksi Berkelanjutan"')
     
     st.write("Airen menjadi langkah revolusioner dalam menjadikan pemantauan polusi udara bukan hanya tugas pasif, tetapi juga tetapi juga mampu menganalisis dan menggambarkan korelasi polusi udara di berbagai sektor.")
     
