@@ -14,9 +14,8 @@ csv_url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OS
 df = pd.read_csv(csv_url, parse_dates=[['Date', 'Time']])
 
 # Display tools content
-st.title('Tools')
-st.write('Choose a tool from the options below.')
-st.write('Correlation tool selected')
+st.title('Analysis Tools')
+
 # Select pollutant columns (B to H) and meteorology columns (I to P)
 pollutant_columns = df.columns[3:11]  # Assuming pollutant columns start from index 2
 meteorology_columns = df.columns[1:3]  # Assuming meteorology columns start from index 9
