@@ -68,8 +68,9 @@ fig.update_layout(
 st.plotly_chart(fig)
 
 # Calculate the correlation coefficient between the selected pollutant and meteorology data
-correlation_coefficient = filtered_df[[selected_pollutant, selected_meteorology]].corr().iloc[0, 1]
-
-# Display the correlation coefficient
-st.write("Correlation Coefficient:", correlation_coefficient)
+if selected_meteorology in filtered_df.columns:
+    correlation_coefficient = filtered_df[[selected_pollutant, selected_meteorology]].corr().iloc[0, 1]
+    st.write("Correlation Coefficient:", correlation_coefficient)
+else:
+    st.write(f"Selected meteorology data '{selected_meteorology}' is not available in the filtered data.")
 
