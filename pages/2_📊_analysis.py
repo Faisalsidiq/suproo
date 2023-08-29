@@ -3,6 +3,7 @@ import pandas as pd
 from datetime import datetime, time
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import random
 
 logo = "logo.png"
 # Display the logo image
