@@ -15,7 +15,7 @@ def main():
     st.title("Air Pollution Pattern Monitoring System")
     st.subheader('Aksi Sementara menjadi "Aksi Berkelanjutan"')
     
-    st.write("Airen menjadi langkah revolusioner dalam menjadikan pemantauan polusi udara bukan hanya tugas pasif, tetapi juga tetapi juga mampu menganalisis dan menggambarkan korelasi polusi udara di berbagai sektor."
+    st.write("Airen menjadi langkah revolusioner dalam menjadikan pemantauan polusi udara bukan hanya tugas pasif, tetapi juga tetapi juga mampu menganalisis dan menggambarkan korelasi polusi udara di berbagai sektor.")
     
     # URL to the Google Sheets CSV export link
     csv_url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OSNeWA-McsX5Bxq8/export?format=csv"
