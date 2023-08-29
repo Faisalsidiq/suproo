@@ -96,19 +96,17 @@ elif selected_tool == 'Statistics':
     start_datetime = datetime.combine(start_date, time(start_hour, start_minute))
     end_datetime = datetime.combine(end_date, time(end_hour, end_minute))
     
-    # Filter data based on selected date and time range
     filtered_df = df[(df['Date_Time'] >= start_datetime) & (df['Date_Time'] <= end_datetime)]
     # Option to show date and time with highest and lowest values of selected pollutant
     show_extremes = st.sidebar.checkbox('Show Date and Time with Extremes')
     if show_extremes:
-        max_value_time = df[df[selected_pollutant] == df[selected_pollutant].max()]['Date_Time'].values[0]
-        min_value_time = df[df[selected_pollutant] == df[selected_pollutant].min()]['Date_Time'].values[0]
+        max_value_time = filtered_df[filtered_df[selected_pollutant] == filtered_df[selected_pollutant].max()]['Date_Time'].values[0]
+        min_value_time = filtered_df[filtered_df[selected_pollutant] == filtered_df[selected_pollutant].min()]['Date_Time'].values[0]
         st.write("Date and Time with Highest Value:", max_value_time)
         st.write("Date and Time with Lowest Value:", min_value_time)
-        show_mean_bar_plot = st.sidebar.checkbox('Show Mean Bar Plot')
-        
+    show_mean_bar_plot = st.sidebar.checkbox('Show Mean Bar Plot')
     if show_mean_bar_plot:
-        mean_values = df[pollutant_columns].mean()
+        mean_values = filtered_df[pollutant_columns].mean()
         fig_mean = go.Figure(data=[go.Bar(x=mean_values.index, y=mean_values.values)])
         fig_mean.update_layout(title='Mean Values of Pollutants', xaxis_title='Pollutants', yaxis_title='Mean Value')
         st.plotly_chart(fig_mean)
@@ -116,7 +114,8 @@ elif selected_tool == 'Statistics':
     # Option to show bar plot of mode of all pollutants
     show_mode_bar_plot = st.sidebar.checkbox('Show Mode Bar Plot')
     if show_mode_bar_plot:
-        mode_values = df[pollutant_columns].mode().iloc[0]
+        mode_values = filtered_df[pollutant_columns].mode().iloc[0]
         fig_mode = go.Figure(data=[go.Bar(x=mode_values.index, y=mode_values.values)])
         fig_mode.update_layout(title='Mode Values of Pollutants', xaxis_title='Pollutants', yaxis_title='Mode Value')
         st.plotly_chart(fig_mode)
+
