@@ -72,12 +72,16 @@ if selected_tool == 'Correlation':
 
     # Calculate the correlation coefficient between the selected pollutant and meteorology data
     if not filtered_df.empty and selected_pollutant in filtered_df.columns and selected_meteorology in filtered_df.columns:
-        correlation_coefficient = filtered_df[[selected_pollutant, selected_meteorology]].corr().iloc[0, 1]
-        
-        # Display the correlation coefficient
-        st.write("Correlation Coefficient:", correlation_coefficient)
+        correlation_df = filtered_df[[selected_pollutant, selected_meteorology]].corr()
+        if not correlation_df.empty and correlation_df.shape[0] > 1 and correlation_df.shape[1] > 1:
+            correlation_coefficient = correlation_df.iloc[0, 1]
+            # Display the correlation coefficient
+            st.write("Correlation Coefficient:", correlation_coefficient)
+        else:
+            st.write("Not enough data for correlation calculation.")
     else:
         st.write("No data available for correlation calculation.")
+
 
     
 elif selected_tool == 'Statistics':
