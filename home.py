@@ -17,9 +17,7 @@ def main():
     
     st.write("Airen menjadi langkah revolusioner dalam menjadikan pemantauan polusi udara bukan hanya tugas pasif, tetapi juga mampu menganalisis dan menggambarkan korelasi polusi udara di berbagai sektor.")
 
-    airen = "Airen.png"
-    # Display the logo image
-    st.image(airen, width=200)  # Adjust the width as needed
+    st.image("Airen.png", caption="Airen", use_column_width=True)
     
     # URL to the Google Sheets CSV export link
     csv_url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OSNeWA-McsX5Bxq8/export?format=csv"
