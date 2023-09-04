@@ -40,8 +40,8 @@ folium.Marker(
 second_csv_url = "https://docs.google.com/spreadsheets/d/1evsslVMH2fx8EUEjDqS0PA0JzBsSdo1jVG4ddmq4dE4/export?format=csv"
 
 # Load the second CSV data using pandas
-df_second = pd.read_csv(second_csv_url, parse_dates=[['date', 'time']])
-df_second['Date_Time'] = pd.to_datetime(df_second['date_time'])
+df_second = pd.read_csv(second_csv_url, parse_dates=[['Date', 'Time']])
+df_second['Date_Time'] = pd.to_datetime(df_second['Date_Time'])
 
 # Get the latest row from the second data
 latest_row_second = df_second.iloc[-1]
@@ -52,7 +52,7 @@ m2 = folium.Map(location=[-7.786335507018436, 110.38799288469626], zoom_start=15
 # Define a custom function to create a popup with data values for the second data
 def create_popup_second(row):
     popup = '<b>Date:</b> {}<br>'.format(row['Date_Time'])
-    for column in df_second.columns[2:]:
+    for column in df_second.columns[1:]:
         popup += '<b>{}:</b> {}<br>'.format(column, row[column])
     return folium.Popup(popup, max_width=300)
 
@@ -69,5 +69,6 @@ folium_static(m1)
 
 st.subheader("Map with Data from Second Spreadsheet")
 folium_static(m2)
+
 
 
