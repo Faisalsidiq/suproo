@@ -16,8 +16,11 @@ csv_url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OS
 df = pd.read_csv(csv_url, parse_dates=[['Date', 'Time']])
 df['Date_Time'] = pd.to_datetime(df['Date_Time'])
 
-# Get the latest row
-latest_row = df.iloc[-1]
+# Get the latest row from the provided Google Sheets link
+new_csv_url = "https://docs.google.com/spreadsheets/d/1YBFtPHmZa6Io25Ef-SNTp2xQCoqK-2Q1bW4XTXQQ_yI/export?format=csv"
+new_df = pd.read_csv(new_csv_url, parse_dates=[['Date', 'Time']])
+new_df['Date_Time'] = pd.to_datetime(new_df['Date_Time'])
+latest_row_new = new_df.iloc[-1]
 
 # Create a Folium map centered around the given latitude and longitude
 m = folium.Map(location=[-7.783000, 110.410538], zoom_start=15)
@@ -29,15 +32,13 @@ def create_popup(row):
         popup += '<b>{}:</b> {}<br>'.format(column, row[column])
     return folium.Popup(popup, max_width=300)
 
-# Add a marker for the given latitude and longitude with the custom popup
+# Add a marker for the given latitude and longitude with the custom popup (latest data from the provided Google Sheets)
 folium.Marker(
-    location=[-7.783000, 110.410538],
-    popup=create_popup(latest_row),
-    icon=folium.Icon(color="blue"),
+    location=[-7.786335507018436, 110.38799288469626],
+    popup=create_popup(latest_row_new),
+    icon=folium.Icon(color="red"),
 ).add_to(m)
 
 # Display the map
 folium_static(m)
-
-
 
