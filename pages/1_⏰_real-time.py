@@ -19,35 +19,55 @@ df_first['Date_Time'] = pd.to_datetime(df_first['Date_Time'])
 # Get the latest row from the first data
 latest_row_first = df_first.iloc[-1]
 
+# Create a Folium map centered around the given latitude and longitude for the first data
+m1 = folium.Map(location=[-7.783000, 110.410538], zoom_start=15)
+
+# Define a custom function to create a popup with data values
+def create_popup_first(row):
+    popup = '<b>Date:</b> {}<br>'.format(row['Date_Time'])
+    for column in df_first.columns[1:]:
+        popup += '<b>{}:</b> {}<br>'.format(column, row[column])
+    return folium.Popup(popup, max_width=300)
+
+# Add a marker for the first latitude and longitude with the custom popup (latest data from the first Google Sheets)
+folium.Marker(
+    location=[-7.783000, 110.410538],
+    popup=create_popup_first(latest_row_first),
+    icon=folium.Icon(color="blue"),
+).add_to(m1)
+
 # URL to the Google Sheets CSV export link for the second data
-second_csv_url = "https://docs.google.com/spreadsheets/d/your_second_spreadsheet_url/export?format=csv"
+second_csv_url = "https://docs.google.com/spreadsheets/d/1evsslVMH2fx8EUEjDqS0PA0JzBsSdo1jVG4ddmq4dE4/export?format=csv"
 
 # Load the second CSV data using pandas
-df_second = pd.read_csv(second_csv_url, parse_dates=[['Waktu']])
-df_second['Date_Time'] = pd.to_datetime(df_second['Date_Time'])
+df_second = pd.read_csv(second_csv_url, parse_dates=[['date', 'time']])
+df_second['Date_Time'] = pd.to_datetime(df_second['date_time'])
 
 # Get the latest row from the second data
 latest_row_second = df_second.iloc[-1]
 
-# Create a Folium map centered around the given latitude and longitude
-m = folium.Map(location=[-7.783000, 110.410538], zoom_start=15)
+# Create a Folium map centered around the given latitude and longitude for the second data
+m2 = folium.Map(location=[-7.786335507018436, 110.38799288469626], zoom_start=15)
 
-# Define a custom function to create a popup with data values
-def create_popup(row):
+# Define a custom function to create a popup with data values for the second data
+def create_popup_second(row):
     popup = '<b>Date:</b> {}<br>'.format(row['Date_Time'])
-    for column in row.index:
-        if column != 'Date_Time':
-            popup += '<b>{}:</b> {}<br>'.format(column, row[column])
+    for column in df_second.columns[2:]:
+        popup += '<b>{}:</b> {}<br>'.format(column, row[column])
     return folium.Popup(popup, max_width=300)
 
-# Add a marker for the given latitude and longitude with the custom popup (latest data from the second Google Sheets)
+# Add a marker for the second latitude and longitude with the custom popup (latest data from the second Google Sheets)
 folium.Marker(
     location=[-7.786335507018436, 110.38799288469626],
-    popup=create_popup(latest_row_second),
+    popup=create_popup_second(latest_row_second),
     icon=folium.Icon(color="red"),
-).add_to(m)
+).add_to(m2)
 
-# Display the map
-folium_static(m)
+# Display both maps
+st.subheader("Map with Data from First Spreadsheet")
+folium_static(m1)
+
+st.subheader("Map with Data from Second Spreadsheet")
+folium_static(m2)
 
 
