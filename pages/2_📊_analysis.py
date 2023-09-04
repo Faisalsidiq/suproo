@@ -44,7 +44,7 @@ end_date = st.sidebar.date_input('End Date', min_value=df['Date_Time'].min().dat
 start_hour = st.sidebar.selectbox('Start Hour', range(24), 0, key='start_hour')
 start_minute = st.sidebar.selectbox('Start Minute', range(60), 0, key='start_minute')
 end_hour = st.sidebar.selectbox('End Hour', range(24), 23, key='end_hour')
-end_minute = st.sidebar.selectbox('End Minute', range(60), 59,, key='end_minute')
+end_minute = st.sidebar.selectbox('End Minute', range(60), 59, key='end_minute')
 
 start_datetime = datetime.combine(start_date, time(start_hour, start_minute))
 end_datetime = datetime.combine(end_date, time(end_hour, end_minute))
