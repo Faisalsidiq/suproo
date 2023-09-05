@@ -58,33 +58,30 @@ st.write(f'Date/Time Range: {start_datetime} to {end_datetime}')
 if selected_tool == 'Correlation':
     st.write('Correlation tool selected')
     
-    # Select pollutant columns (B to H) and meteorology columns (I to P)
-    pollutant_columns = df.columns[3:12]  # Assuming pollutant columns start from index 2
-    meteorology_columns = df.columns[1:3]  # Assuming meteorology columns start from index 9
+    # Select columns for Variabel1 and Variabel2
+    all_columns = df.columns
+    selected_variabel1 = st.sidebar.selectbox('Select Variabel1', all_columns, key='corr_variabel1')
+    selected_variabel2 = st.sidebar.selectbox('Select Variabel2', all_columns, key='corr_variabel2')
     
-    # Sidebar inputs
-    selected_pollutant = st.sidebar.selectbox('Select Pollutant', pollutant_columns, key='corr_pollutant')
-    selected_meteorology = st.sidebar.selectbox('Select Meteorology Data', meteorology_columns, key='corr_meteorology')
-    
-    # Create line plot for the correlation between selected pollutant and meteorology data using Plotly
+    # Create line plot for the correlation between selected Variabel1 and Variabel2 using Plotly
     fig = make_subplots(specs=[[{"secondary_y": True}]])
-    fig.add_trace(go.Scatter(x=filtered_df['Date_Time'], y=filtered_df[selected_pollutant], mode='lines', name=selected_pollutant), secondary_y=False)
-    fig.add_trace(go.Scatter(x=filtered_df['Date_Time'], y=filtered_df[selected_meteorology], mode='lines', name=selected_meteorology), secondary_y=True)
+    fig.add_trace(go.Scatter(x=filtered_df['Date_Time'], y=filtered_df[selected_variabel1], mode='lines', name=selected_variabel1), secondary_y=False)
+    fig.add_trace(go.Scatter(x=filtered_df['Date_Time'], y=filtered_df[selected_variabel2], mode='lines', name=selected_variabel2), secondary_y=True)
     
     # Update the layout with titles and y-axis labels
     fig.update_layout(
-        title=f'Correlation between {selected_pollutant} and {selected_meteorology}',
+        title=f'Correlation between {selected_variabel1} and {selected_variabel2}',
         xaxis_title='Time',
-        yaxis=dict(title=selected_pollutant, side='left'),
-        yaxis2=dict(title=selected_meteorology, side='right')
+        yaxis=dict(title=selected_variabel1, side='left'),
+        yaxis2=dict(title=selected_variabel2, side='right')
     )
     
     # Display the correlation line plot
     st.plotly_chart(fig)
 
-    # Calculate the correlation coefficient between the selected pollutant and meteorology data
-    if not filtered_df.empty and selected_pollutant in filtered_df.columns and selected_meteorology in filtered_df.columns:
-        correlation_df = filtered_df[[selected_pollutant, selected_meteorology]].corr()
+    # Calculate the correlation coefficient between the selected Variabel1 and Variabel2
+    if not filtered_df.empty and selected_variabel1 in filtered_df.columns and selected_variabel2 in filtered_df.columns:
+        correlation_df = filtered_df[[selected_variabel1, selected_variabel2]].corr()
         if not correlation_df.empty and correlation_df.shape[0] > 1 and correlation_df.shape[1] > 1:
             correlation_coefficient = correlation_df.iloc[0, 1]
             # Display the correlation coefficient
@@ -96,29 +93,26 @@ if selected_tool == 'Correlation':
 
 elif selected_tool == 'Statistics':
     st.write('Statistics tool selected')
-    pollutant_columns = df.columns[3:12]  # Assuming pollutant columns start from index 2
-    meteorology_columns = df.columns[1:3]  # Assuming meteorology columns start from index 9
     
-    # Option to show bar plot of mean of all pollutants
+    # Option to show bar plot of mean of all columns
     show_mean_bar_plot = st.sidebar.checkbox('Show Mean Bar Plot')
     if show_mean_bar_plot:
-        mean_values = filtered_df[pollutant_columns].mean()
+        mean_values = filtered_df.mean()
         st.write("Mean Values:")
         st.write(mean_values)
 
         fig_mean = go.Figure(data=[go.Bar(x=mean_values.index, y=mean_values.values)])
-        fig_mean.update_layout(title='Mean Values of Pollutants', xaxis_title='Pollutants', yaxis_title='Mean Value')
+        fig_mean.update_layout(title='Mean Values of Variabels', xaxis_title='Variabels', yaxis_title='Mean Value')
         st.plotly_chart(fig_mean)
 
-    # Option to show bar plot of mode of all pollutants
+    # Option to show bar plot of mode of all columns
     show_mode_bar_plot = st.sidebar.checkbox('Show Mode Bar Plot')
     if show_mode_bar_plot:
-        mode_values = filtered_df[pollutant_columns].mode().iloc[0]
+        mode_values = filtered_df.mode().iloc[0]
         st.write("Mode Values:")
         st.write(mode_values)
 
         fig_mode = go.Figure(data=[go.Bar(x=mode_values.index, y=mode_values.values)])
-        fig_mode.update_layout(title='Mode Values of Pollutants', xaxis_title='Pollutants', yaxis_title='Mode Value')
+        fig_mode.update_layout(title='Mode Values of Variabels', xaxis_title='Variabels', yaxis_title='Mode Value')
         st.plotly_chart(fig_mode)
-
 
