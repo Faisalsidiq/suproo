@@ -59,7 +59,7 @@ if selected_tool == 'Correlation':
     st.write('Correlation tool selected')
     
     # Select columns for Variabel1 and Variabel2
-    all_columns = df.columns
+    all_columns = df.columns[2:]  # Exclude Date and Time columns
     selected_variabel1 = st.sidebar.selectbox('Select Variabel1', all_columns, key='corr_variabel1')
     selected_variabel2 = st.sidebar.selectbox('Select Variabel2', all_columns, key='corr_variabel2')
     
