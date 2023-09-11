@@ -11,4 +11,4 @@ folium>=0.13
 streamlit_folium==0.13.0
 lottie==0.7.0
 streamlit_lottie==0.0.5
-statsmodels==0.15.0
+statsmodels==0.13.0
