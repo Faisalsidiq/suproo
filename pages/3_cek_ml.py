@@ -1,39 +1,49 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 from statsmodels.tsa.arima.model import ARIMA
 
-# Membaca data dari Google Sheets
-url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OSNeWA-McsX5Bxq8/export?format=csv"
-df = pd.read_csv(url)
+# Sidebar options
+st.sidebar.title('Options')
+selected_dataset = st.sidebar.selectbox('Select Data ', ['CO', 'SO2','O3','NO2', 'HC]', 'PM1p0', 'PM2p5', 'PM10'])
 
-# Menambahkan kolom Datetime
-df['Datetime'] = pd.to_datetime(df['Date'] + ' ' + df['Time'])
-df = df.drop(['Date', 'Time'], axis=1)
-df.set_index('Datetime', inplace=True)
+    url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OSNeWA-McsX5Bxq8/export?format=csv"
+    df = pd.read_csv(url)
 
+    # Menambahkan kolom Datetime
+    df['Datetime'] = pd.to_datetime(df['Date'] + ' ' + df['Time'])
+    df = df.drop(['Date', 'Time'], axis=1)
+    df.set_index('Datetime', inplace=True)
 
-st.title("Prediksi SO2 dengan Model ARIMA")
+    st.title("Prediksi Data dengan Model ARIMA")
 
-# CO predictions
-df['SO2'] = pd.to_numeric(df['SO2'], errors='coerce', downcast='integer')
-SO2 = df['SO2']
+    # Train ARIMA models for all columns
+    p, d, q = 5, 1, 0
+    models = {}
 
-train_size = int(len(SO2) * 0.8)
-train, test = SO2[:train_size], SO2[train_size:]
+    for column in df.columns:
+        df[column] = pd.to_numeric(df[column], errors='coerce', downcast='integer')
+        data = df[column]
 
-p, d, q = 5, 1, 0
-model = ARIMA(train, order=(p, d, q))
-model_fit = model.fit()
+        train_size = int(len(data) * 0.8)
+        train, test = data[:train_size], data[train_size:]
 
-# Predict SO2 values for the next 7 days
-predictions = model_fit.forecast(steps=7)
+        model = ARIMA(train, order=(p, d, q))
+        model_fit = model.fit()
+        models[column] = model_fit
 
-# Create date range for predictions
-prediction_dates = pd.date_range(start=SO2.index[train_size], periods=len(predictions), freq='D')
+    # Predict data for the next 7 days for all columns
+    num_periods = 7
+    prediction_results = {}
 
-# Print SO2 predictions for each day
-st.subheader("Prediksi SO2 untuk 7 hari ke depan:")
-for date, prediction in zip(prediction_dates, predictions):
-    st.write(f'Tanggal: {date.date()}, Prediksi SO2: {prediction:.2f}')
+    for column in df.columns:
+        model_fit = models[column]
+        last_date = df.index[-1]
+        prediction_dates = pd.date_range(start=last_date, periods=num_periods + 1, closed='right')
+        predictions = model_fit.forecast(steps=num_periods)
+        prediction_results[column] = {'dates': prediction_dates[1:], 'predictions': predictions}
+
+    # Display the predictions (You can choose to display or not)
+    for column in df.columns:
+        st.subheader(f"Prediksi {column} untuk 7 hari ke depan:")
+        prediction_df = pd.DataFrame({'Date': prediction_results[column]['dates'], 'Prediction': prediction_results[column]['predictions']})
+        st.write(prediction_df)
