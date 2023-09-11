@@ -41,7 +41,6 @@ def predict_column(column_name):
     return prediction_result
 
 # UI Streamlit
-st.title("Prediksi Data Time Series")
 selected_column = st.selectbox("Pilih kolom yang ingin diolah:", df.columns)
 
 if st.button("Prediksi"):
