@@ -5,13 +5,6 @@ import json
 import requests
 import random
 import re
-import train_so2
-import analysis
-
-pages = {
-    "Train SO2": train_so2,
-    "2_📊_analysis.py": analysis,
-}
 
 def main():
 
