@@ -3,6 +3,9 @@ from statsmodels.tsa.arima.model import ARIMA
 import pickle
 
 
+csv_url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OSNeWA-McsX5Bxq8/export?format=csv"
+df = load_and_preprocess_data(csv_url)
+
 # Function to preprocess data
 def preprocess_value(value):
     if value == '#NUM!':
@@ -15,15 +18,9 @@ def load_and_preprocess_data(csv_url):
     df = df.applymap(preprocess_value)
     return df
     
-# Baca data dari sumber Anda (misalnya, file CSV)
-# Load data based on the selected dataset
-if selected_dataset == 'Dataset 1':
-    csv_url = "https://docs.google.com/spreadsheets/d/1tjFxtP6AiQ2xZ927yGs1kCB5Cg9OSNeWA-McsX5Bxq8/export?format=csv"
-    df = load_and_preprocess_data(csv_url)
-else:
-    csv_url = "https://docs.google.com/spreadsheets/d/1evsslVMH2fx8EUEjDqS0PA0JzBsSdo1jVG4ddmq4dE4/export?format=csv"
-    df = load_and_preprocess_data(csv_url)
 
+    
+    
 # Lakukan pra-pemrosesan data jika diperlukan
 df['Datetime'] = pd.to_datetime(df['Datetime'])
 df.set_index('Datetime', inplace=True)
@@ -41,5 +38,5 @@ for kolom in kolom_latih:
 
     # Simpan model ke dalam file dengan nama yang sesuai dengan kolom
     nama_file_model = f'arima_model_{kolom.lower()}.pkl'
-    with open(nama_file_model, 'wb') as model_file:
+    with open(arima_model.pkl, 'wb') as model_file:
         pickle.dump(model_fit, model_file)
