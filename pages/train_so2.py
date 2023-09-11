@@ -37,6 +37,9 @@ prediction_dates = pd.date_range(start=SO2.index[train_size], periods=len(predic
 st.subheader("Prediksi SO2 untuk 7 hari ke depan:")
 for date, prediction in zip(prediction_dates, predictions):
     st.write(f'Tanggal: {date.date()}, Prediksi SO2: {prediction:.2f}')
-  hasil_so2 = st.write(f'Tanggal: {date.date()}, Prediksi SO2: {prediction:.2f}')
+    
+  # Hasil pelatihan model SO2 (contoh)
+hasil_so2 = f'Tanggal: {date.date()}, Prediksi SO2: {prediction:.2f}'
 
-url_so2 = st.url("2_📊_analysis.py", hasil_so2=hasil_so2)
+# Menyimpan hasil pelatihan SO2 ke dalam variabel berbagi
+st.session_state.hasil_so2 = hasil_so2
