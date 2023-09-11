@@ -4,8 +4,16 @@ from datetime import datetime, time
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import random
+import pickle
+from statsmodels.tsa.arima.model import ARIMA
 
 # Function to preprocess data
+def preprocess_data(df):
+    for column in df.columns:
+        df[column] = df[column].apply(preprocess_value)
+        df[column] = pd.to_numeric(df[column], errors='coerce', downcast='integer')
+    return df
+
 def preprocess_value(value):
     if value == '#NUM!':
         return random.randint(0, 100)
@@ -17,24 +25,13 @@ def load_and_preprocess_data(csv_url):
     df = df.applymap(preprocess_value)
     return df
 
-def predict_arima(data_column):
-    # Preprocess data if necessary
-    data_column = pd.to_numeric(data_column, errors='coerce', downcast='integer')
-
-    # Split data into training and testing
-    train_size = int(len(data_column) * 0.8)
-    train, test = data_column[:train_size], data_column[train_size:]
-
-    # Define ARIMA order
-    p, d, q = 5, 1, 0
-
-    # Fit ARIMA model
-    model = ARIMA(train, order=(p, d, q))
-    model_fit = model.fit()
-
-    # Forecast for the next 7 days
-    predictions = model_fit.forecast(steps=7)
-
+def predict_arima(selected_variable, model_fit):
+    # Ambil data dari kolom yang dipilih
+    selected_data = filtered_df[selected_variable]
+    
+    # Lakukan prediksi menggunakan model ARIMA
+    predictions = model_fit.forecast(steps=len(selected_data))
+    
     return predictions
 
 # Sidebar options
@@ -131,7 +128,7 @@ elif selected_tool == 'Statistics':
         st.write("Mean Values:")
         st.write(mean_values)
 
-        fig_mean = go.Figure(data=[go.Bar(x=mean_values.index, y=mean_values.values)])
+        fig_mean = go.Figure(df=[go.Bar(x=mean_values.index, y=mean_values.values)])
         fig_mean.update_layout(title='Mean Values of Variabels', xaxis_title='Variabels', yaxis_title='Mean Value')
         st.plotly_chart(fig_mean)
 
@@ -142,7 +139,26 @@ elif selected_tool == 'Statistics':
         st.write("Mode Values:")
         st.write(mode_values)
 
-        fig_mode = go.Figure(data=[go.Bar(x=mode_values.index, y=mode_values.values)])
+        fig_mode = go.Figure(df=[go.Bar(x=mode_values.index, y=mode_values.values)])
         fig_mode.update_layout(title='Mode Values of Variabels', xaxis_title='Variabels', yaxis_title='Mode Value')
         st.plotly_chart(fig_mode)
+
+if selected_tool == 'Correlation':
+    st.subheader('ARIMA Prediction')
+    
+    # Muat model ARIMA yang sesuai
+    with open(f'arima_model_{selected_variabel1}.pkl', 'rb') as model_file:
+        model_fit = pickle.load(model_file)
+
+    # Lakukan prediksi menggunakan model ARIMA
+    predictions = predict_arima(selected_variabel1, model_fit)
+    
+    # Tampilkan hasil prediksi
+    st.write(f'ARIMA Predictions for {selected_variabel1}:')
+    st.write(predictions)
+
+
+
+
+
 
