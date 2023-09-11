@@ -17,6 +17,26 @@ def load_and_preprocess_data(csv_url):
     df = df.applymap(preprocess_value)
     return df
 
+def predict_arima(data_column):
+    # Preprocess data if necessary
+    data_column = pd.to_numeric(data_column, errors='coerce', downcast='integer')
+
+    # Split data into training and testing
+    train_size = int(len(data_column) * 0.8)
+    train, test = data_column[:train_size], data_column[train_size:]
+
+    # Define ARIMA order
+    p, d, q = 5, 1, 0
+
+    # Fit ARIMA model
+    model = ARIMA(train, order=(p, d, q))
+    model_fit = model.fit()
+
+    # Forecast for the next 7 days
+    predictions = model_fit.forecast(steps=7)
+
+    return predictions
+
 # Sidebar options
 st.sidebar.title('Options')
 selected_dataset = st.sidebar.selectbox('Select Dataset', ['Dataset 1', 'Dataset 2'])
@@ -63,6 +83,16 @@ if selected_tool == 'Correlation':
     selected_variabel1 = st.sidebar.selectbox('Select Variabel1', all_columns, key='corr_variabel1')
     selected_variabel2 = st.sidebar.selectbox('Select Variabel2', all_columns, key='corr_variabel2')
     
+    # Check if the selected_variabel1 is one of the variables to predict with ARIMA
+    arima_variables = ['CO', 'SO2', 'O3', 'NO2', 'HC', 'PM1p0', 'PM2p5', 'PM10']
+    if selected_variabel1 in arima_variables:
+        # Run ARIMA prediction
+        predictions = predict_arima(df[selected_variabel1])
+
+        # Display ARIMA predictions
+        st.subheader(f"Prediksi {selected_variabel1} untuk 7 hari ke depan:")
+        for prediction in predictions:
+            st.write(f'Prediksi: {prediction:.2f}')
     # Create line plot for the correlation between selected Variabel1 and Variabel2 using Plotly
     fig = make_subplots(specs=[[{"secondary_y": True}]])
     fig.add_trace(go.Scatter(x=filtered_df['Date_Time'], y=filtered_df[selected_variabel1], mode='lines', name=selected_variabel1), secondary_y=False)
