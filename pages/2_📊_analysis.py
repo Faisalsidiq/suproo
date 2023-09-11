@@ -4,16 +4,10 @@ from datetime import datetime, time
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import random
-import pickle
+import matplotlib.pyplot as plt
 from statsmodels.tsa.arima.model import ARIMA
 
 # Function to preprocess data
-def preprocess_data(df):
-    for column in df.columns:
-        df[column] = df[column].apply(preprocess_value)
-        df[column] = pd.to_numeric(df[column], errors='coerce', downcast='integer')
-    return df
-
 def preprocess_value(value):
     if value == '#NUM!':
         return random.randint(0, 100)
@@ -24,15 +18,6 @@ def load_and_preprocess_data(csv_url):
     df = pd.read_csv(csv_url, parse_dates=[['Date', 'Time']])
     df = df.applymap(preprocess_value)
     return df
-
-def predict_arima(selected_variable, model_fit):
-    # Ambil data dari kolom yang dipilih
-    selected_data = filtered_df[selected_variable]
-    
-    # Lakukan prediksi menggunakan model ARIMA
-    predictions = model_fit.forecast(steps=len(selected_data))
-    
-    return predictions
 
 # Sidebar options
 st.sidebar.title('Options')
@@ -80,16 +65,6 @@ if selected_tool == 'Correlation':
     selected_variabel1 = st.sidebar.selectbox('Select Variabel1', all_columns, key='corr_variabel1')
     selected_variabel2 = st.sidebar.selectbox('Select Variabel2', all_columns, key='corr_variabel2')
     
-    # Check if the selected_variabel1 is one of the variables to predict with ARIMA
-    arima_variables = ['CO', 'SO2', 'O3', 'NO2', 'HC', 'PM1p0', 'PM2p5', 'PM10']
-    if selected_variabel1 in arima_variables:
-        # Run ARIMA prediction
-        predictions = predict_arima(df[selected_variabel1])
-
-        # Display ARIMA predictions
-        st.subheader(f"Prediksi {selected_variabel1} untuk 7 hari ke depan:")
-        for prediction in predictions:
-            st.write(f'Prediksi: {prediction:.2f}')
     # Create line plot for the correlation between selected Variabel1 and Variabel2 using Plotly
     fig = make_subplots(specs=[[{"secondary_y": True}]])
     fig.add_trace(go.Scatter(x=filtered_df['Date_Time'], y=filtered_df[selected_variabel1], mode='lines', name=selected_variabel1), secondary_y=False)
@@ -118,6 +93,36 @@ if selected_tool == 'Correlation':
     else:
         st.write("No data available for correlation calculation.")
 
+        # Menambahkan kolom Datetime
+    df['Datetime'] = pd.to_datetime(df['Date'] + ' ' + df['Time'])
+    df = df.drop(['Date', 'Time'], axis=1)
+    df.set_index('Datetime', inplace=True)
+    
+    
+    st.title("Prediksi CO dengan Model ARIMA")
+    
+    # CO predictions
+    df['CO'] = pd.to_numeric(df['CO'], errors='coerce', downcast='integer')
+    CO = df['CO']
+    
+    train_size = int(len(CO) * 0.8)
+    train, test = CO[:train_size], CO[train_size:]
+    
+    p, d, q = 5, 1, 0
+    model = ARIMA(train, order=(p, d, q))
+    model_fit = model.fit()
+    
+    # Predict CO values for the next 7 days
+    predictions = model_fit.forecast(steps=7)
+    
+    # Create date range for predictions
+    prediction_dates = pd.date_range(start=CO.index[train_size], periods=len(predictions), freq='D')
+    
+    # Print CO predictions for each day
+    st.subheader("Prediksi CO untuk 7 hari ke depan:")
+    for date, prediction in zip(prediction_dates, predictions):
+        st.write(f'Tanggal: {date.date()}, Prediksi CO: {prediction:.2f}')
+
 elif selected_tool == 'Statistics':
     st.write('Statistics tool selected')
     
@@ -128,7 +133,7 @@ elif selected_tool == 'Statistics':
         st.write("Mean Values:")
         st.write(mean_values)
 
-        fig_mean = go.Figure(df=[go.Bar(x=mean_values.index, y=mean_values.values)])
+        fig_mean = go.Figure(data=[go.Bar(x=mean_values.index, y=mean_values.values)])
         fig_mean.update_layout(title='Mean Values of Variabels', xaxis_title='Variabels', yaxis_title='Mean Value')
         st.plotly_chart(fig_mean)
 
@@ -139,26 +144,6 @@ elif selected_tool == 'Statistics':
         st.write("Mode Values:")
         st.write(mode_values)
 
-        fig_mode = go.Figure(df=[go.Bar(x=mode_values.index, y=mode_values.values)])
+        fig_mode = go.Figure(data=[go.Bar(x=mode_values.index, y=mode_values.values)])
         fig_mode.update_layout(title='Mode Values of Variabels', xaxis_title='Variabels', yaxis_title='Mode Value')
         st.plotly_chart(fig_mode)
-
-if selected_tool == 'Correlation':
-    st.subheader('ARIMA Prediction')
-    
-    # Muat model ARIMA yang sesuai
-    with open(f'arima_model_{selected_variabel1}.pkl', 'rb') as model_file:
-        model_fit = pickle.load(model_file)
-
-    # Lakukan prediksi menggunakan model ARIMA
-    predictions = predict_arima(selected_variabel1, model_fit)
-    
-    # Tampilkan hasil prediksi
-    st.write(f'ARIMA Predictions for {selected_variabel1}:')
-    st.write(predictions)
-
-
-
-
-
-
