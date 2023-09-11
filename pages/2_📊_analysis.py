@@ -89,8 +89,8 @@ if selected_tool == 'Correlation':
             st.write("Correlation Coefficient:", correlation_coefficient)
             hasil_so2 = st.session_state.hasil_so2
 
-# Menampilkan hasil pelatihan model SO2
-st.write("Hasil Pelatihan Model SO2:", hasil_so2)
+            # Menampilkan hasil pelatihan model SO2
+            st.write("Hasil Pelatihan Model SO2:", hasil_so2)
         else:
             st.write("Not enough data for correlation calculation.")
     else:
