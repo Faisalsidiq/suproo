@@ -1,3 +1,4 @@
+import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -13,37 +14,26 @@ df = df.drop(['Date', 'Time'], axis=1)
 df.set_index('Datetime', inplace=True)
 
 
-# Fungsi untuk memprediksi kolom tertentu
-def predict_column(column_name):
-    # Mengonversi kolom menjadi tipe data numerik
-    df[column_name] = pd.to_numeric(df[column_name], errors='coerce', downcast='integer')
-    column_data = df[column_name]
-    
-    train_size = int(len(column_data) * 0.8)
-    train, test = column_data[:train_size], column_data[train_size:]
+st.title("Prediksi CO dengan Model ARIMA")
 
-    p, d, q = 5, 1, 0
-    model = ARIMA(train, order=(p, d, q))
-    model_fit = model.fit()
+# CO predictions
+df['CO'] = pd.to_numeric(df['CO'], errors='coerce', downcast='integer')
+CO = df['CO']
 
-    # Memprediksi nilai kolom per hari dalam periode pengujian
-    predictions = model_fit.forecast(steps=7)
+train_size = int(len(CO) * 0.8)
+train, test = CO[:train_size], CO[train_size:]
 
-    # Membuat rentang waktu harian untuk prediksi
-    start_date = column_data.index[train_size]  # Tanggal data pengujian terakhir
-    prediction_dates = pd.date_range(start=start_date, periods=7, freq='D')
+p, d, q = 5, 1, 0
+model = ARIMA(train, order=(p, d, q))
+model_fit = model.fit()
 
-    # Mencetak prediksi kolom untuk setiap hari dalam satu minggu ke depan
-    prediction_result = []
-    for date, prediction in zip(prediction_dates, predictions):
-        prediction_result.append(f'Tanggal: {date.date()}, Prediksi {column_name}: {prediction:.2f}')
-    
-    return prediction_result
+# Predict CO values for the next 7 days
+predictions = model_fit.forecast(steps=7)
 
-# UI Streamlit
-selected_column = st.selectbox("Pilih kolom yang ingin diolah:", df.columns)
+# Create date range for predictions
+prediction_dates = pd.date_range(start=CO.index[train_size], periods=len(predictions), freq='D')
 
-if st.button("Prediksi"):
-    st.write(f"Hasil Prediksi untuk Kolom '{selected_column}':")
-    predictions = predict_column(selected_column)
-    st.write(predictions)
+# Print CO predictions for each day
+st.subheader("Prediksi CO untuk 7 hari ke depan:")
+for date, prediction in zip(prediction_dates, predictions):
+    st.write(f'Tanggal: {date.date()}, Prediksi CO: {prediction:.2f}')
