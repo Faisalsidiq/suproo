@@ -1,0 +1,25 @@
+name: ARIMA Training
+
+on:
+  push:
+    branches:
+      - main  # Adjust the branch name as needed
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.0 # Specify your Python version
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Train and save ARIMA models
+        run: python train_arima_model.py  # Replace with your script's filename
