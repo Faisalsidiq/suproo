@@ -126,16 +126,22 @@ def create_popup_first(row):
     popup = '<b>Date:</b> {}<br>'.format(row['Date_Time'])
     for column in df_first.columns[1:]:
         value = row[column]
-        pollutant_category = hitung_tingkat_polusi(column, value)
-        popup += '<b>{}:</b> {} ({})<br>'.format(column, value, pollutant_category)
+        if column in ['Temperature', 'Humidity', 'PM1p0']:
+            popup += '<b>{}:</b> {}<br>'.format(column, value)
+        else :
+            pollutant_category = hitung_tingkat_polusi(column, value)
+            popup += '<b>{}:</b> {} ({})<br>'.format(column, value, pollutant_category)
     return folium.Popup(popup, max_width=300)
 
 def create_popup_second(row):
     popup = '<b>Date:</b> {}<br>'.format(row['Date_Time'])
     for column in df_second.columns[1:]:
         value = row[column]
-        pollutant_category = hitung_tingkat_polusi(column, value)
-        popup += '<b>{}:</b> {} ({})<br>'.format(column, value, pollutant_category)
+        if column in ['Temperature', 'Humidity', 'PM1p0']:
+            popup += '<b>{}:</b> {}<br>'.format(column, value)
+        else :
+            pollutant_category = hitung_tingkat_polusi(column, value)
+            popup += '<b>{}:</b> {} ({})<br>'.format(column, value, pollutant_category)
     return folium.Popup(popup, max_width=300)
 
 
