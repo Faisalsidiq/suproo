@@ -82,7 +82,6 @@ if selected_tool == 'Correlation':
 
     # Menambahkan kolom Datetime
     df['Datetime'] = pd.to_datetime(df['Date'] + ' ' + df['Time'])
-    df = df.drop(['Date', 'Time'], axis=1)
     df.set_index('Datetime', inplace=True)
     
     
