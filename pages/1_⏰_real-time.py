@@ -17,6 +17,7 @@ second_csv_url = "https://docs.google.com/spreadsheets/d/1evsslVMH2fx8EUEjDqS0PA
 
 # Load both CSV data using pandas
 df_first = pd.read_csv(first_csv_url, parse_dates=[['Date', 'Time']])
+df_first = df_first.replace('#num', float('nan'))
 df_first['Date_Time'] = pd.to_datetime(df_first['Date_Time'])
 
 df_second = pd.read_csv(second_csv_url, parse_dates=[['Date', 'Time']])
