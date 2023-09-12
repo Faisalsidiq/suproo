@@ -118,8 +118,11 @@ def hitung_tingkat_polusi(pollutant_name, value):
 def create_popup_first(row):
     popup = '<b>Date:</b> {}<br>'.format(row['Date_Time'])
     for column in df_first.columns[1:]:
-        popup += '<b>{}:</b> {}<br>'.format(column, row[column])
+        value = row[column]
+        pollutant_category = hitung_tingkat_polusi(column, value)
+        popup += '<b>{}:</b> {} ({})<br>'.format(column, value, pollutant_category)
     return folium.Popup(popup, max_width=300)
+
 
 
 
