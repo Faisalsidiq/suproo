@@ -19,7 +19,7 @@ def preprocess_value(value):
 # Function to load and preprocess data
 def load_and_preprocess_data(csv_url):
     df = pd.read_csv(csv_url, parse_dates=[['Date', 'Time']])
-    print(df)
+ 
     df = df.applymap(preprocess_value)
     return df
 
@@ -98,6 +98,7 @@ if selected_tool == 'Correlation':
             correlation_coefficient = correlation_df.iloc[0, 1]
             # Display the correlation coefficient
             st.write("Correlation Coefficient:", correlation_coefficient)
+            st.write(df)
             
         else:
             st.write("Not enough data for correlation calculation.")
