@@ -19,7 +19,7 @@ def preprocess_value(value):
 # Function to load and preprocess data
 def load_and_preprocess_data(csv_url):
     df = pd.read_csv(csv_url, parse_dates=[['Date', 'Time']])
-    df.set_index('Datetime', inplace=True)
+    print(df)
     df = df.applymap(preprocess_value)
     return df
 
