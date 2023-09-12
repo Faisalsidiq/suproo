@@ -88,6 +88,23 @@ if selected_tool == 'Correlation':
     # Display the correlation line plot
     st.plotly_chart(fig)
 
+
+    # Calculate the correlation coefficient between the selected Variabel1 and Variabel2
+    if not filtered_df.empty and selected_variabel1 in filtered_df.columns and selected_variabel2 in filtered_df.columns:
+        correlation_df = filtered_df[[selected_variabel1, selected_variabel2]].corr()
+        if not correlation_df.empty and correlation_df.shape[0] > 1 and correlation_df.shape[1] > 1:
+            correlation_coefficient = correlation_df.iloc[0, 1]
+            # Display the correlation coefficient
+            st.write("Correlation Coefficient:", correlation_coefficient)
+
+            
+                    
+        else:
+            st.write("Not enough data for correlation calculation.")
+    else:
+        st.write("No data available for correlation calculation.")
+
+    
     df.set_index('Date_Time', inplace=True)
     # selected_variabel1 predictions
     st.title(f"Prediksi {selected_variabel1} 7 Hari Kedepan")
@@ -108,23 +125,6 @@ if selected_tool == 'Correlation':
     for date, prediction in zip(prediction_dates, predictions):
         st.write(f'Tanggal: {date.date()}, Prediksi {selected_variabel1.name}: {prediction:.2f}')
 
-    
-    
-
-    # Calculate the correlation coefficient between the selected Variabel1 and Variabel2
-    if not filtered_df.empty and selected_variabel1 in filtered_df.columns and selected_variabel2 in filtered_df.columns:
-        correlation_df = filtered_df[[selected_variabel1, selected_variabel2]].corr()
-        if not correlation_df.empty and correlation_df.shape[0] > 1 and correlation_df.shape[1] > 1:
-            correlation_coefficient = correlation_df.iloc[0, 1]
-            # Display the correlation coefficient
-            st.write("Correlation Coefficient:", correlation_coefficient)
-
-            
-                    
-        else:
-            st.write("Not enough data for correlation calculation.")
-    else:
-        st.write("No data available for correlation calculation.")
 
      
  
