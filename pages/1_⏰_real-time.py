@@ -29,31 +29,6 @@ latest_row_second = df_second.iloc[-1]
 # Create a Folium map centered around a specific latitude and longitude
 m = folium.Map(location=[-7.786335507018436, 110.38799288469626], zoom_start=15)
 
-
-# Define custom functions to create popups with data values
-def create_popup_first(row):
-    popup = '<b>Date:</b> {}<br>'.format(row['Date_Time'])
-    popup += '<b>CO:</b> {} ({})<br>'.format(row['CO'], hitung_tingkat_polusi('CO', row['CO']))
-    popup += '<b>SO2:</b> {} ({})<br>'.format(row['SO2'], hitung_tingkat_polusi('SO2', row['SO2']))
-    popup += '<b>O3:</b> {} ({})<br>'.format(row['O3'], hitung_tingkat_polusi('O3', row['O3']))
-    popup += '<b>NO2:</b> {} ({})<br>'.format(row['NO2'], hitung_tingkat_polusi('NO2', row['NO2']))
-    popup += '<b>HC:</b> {} ({})<br>'.format(row['HC'], hitung_tingkat_polusi('HC', row['HC']))
-    popup += '<b>PM10:</b> {} ({})<br>'.format(row['PM10'], hitung_tingkat_polusi('PM10', row['PM10']))
-    popup += '<b>PM2p5:</b> {} ({})<br>'.format(row['PM2p5'], hitung_tingkat_polusi('PM2p5', row['PM2p5']))
-    return folium.Popup(popup, max_width=300)
-
-def create_popup_second(row):
-    popup = '<b>Date:</b> {}<br>'.format(row['Date_Time'])
-    popup += '<b>CO:</b> {} ({})<br>'.format(row['CO'], hitung_tingkat_polusi('CO', row['CO']))
-    popup += '<b>SO2:</b> {} ({})<br>'.format(row['SO2'], hitung_tingkat_polusi('SO2', row['SO2']))
-    popup += '<b>O3:</b> {} ({})<br>'.format(row['O3'], hitung_tingkat_polusi('O3', row['O3']))
-    popup += '<b>NO2:</b> {} ({})<br>'.format(row['NO2'], hitung_tingkat_polusi('NO2', row['NO2']))
-    popup += '<b>HC:</b> {} ({})<br>'.format(row['HC'], hitung_tingkat_polusi('HC', row['HC']))
-    popup += '<b>PM10:</b> {} ({})<br>'.format(row['PM10'], hitung_tingkat_polusi('PM10', row['PM10']))
-    popup += '<b>PM2p5:</b> {} ({})<br>'.format(row['PM2p5'], hitung_tingkat_polusi('PM2p5', row['PM2p5']))
-    return folium.Popup(popup, max_width=300)
-
-
 def hitung_tingkat_polusi(pollutant_name, value):
     if pollutant_name == 'CO':
         if value < 4000:
@@ -138,6 +113,19 @@ def hitung_tingkat_polusi(pollutant_name, value):
             return "Sangat Tidak Sehat"
         else:
             return "Berbahaya"
+
+# Define custom functions to create popups with data values
+def create_popup_first(row):
+    popup = '<b>Date:</b> {}<br>'.format(row['Date_Time'])
+    for column in df_first.columns[1:]:
+        popup += '<b>{}:</b> {}<br>'.format(column, row[column])
+    return folium.Popup(popup, max_width=300)
+
+def create_popup_second(row):
+    popup = '<b>Date:</b> {}<br>'.format(row['Date_Time'])
+    for column in df_second.columns[1:]:
+        popup += '<b>{}:</b> {}<br>'.format(column, row[column])
+    return folium.Popup(popup, max_width=300)
 
 
 
