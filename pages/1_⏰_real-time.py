@@ -42,94 +42,20 @@ def hitung_tingkat_polusi(column, value):
         else:
             return "Berbahaya"
             
-    elif column == 'SO2':
-        if value < 52:
-            return "Baik"
-        elif value >= 52 and value < 180:
-            return "Sedang"
-        elif value >= 180 and value < 400:
-            return "Tidak Sehat"
-        elif value >= 400 and value < 800:
-            return "Sangat Tidak Sehat"
-        else:
-            return "Berbahaya"
-            
-    elif column == 'O3':
-        if value < 120:
-            return "Baik"
-        elif value >= 120 and value < 235:
-            return "Sedang"
-        elif value >= 235 and value < 400:
-            return "Tidak Sehat"
-        elif value >= 400 and value < 800:
-            return "Sangat Tidak Sehat"
-        else:
-            return "Berbahaya"
-            
-    elif column == 'NO2':
-        if value < 80:
-            return "Baik"
-        elif value >= 80 and value < 200:
-            return "Sedang"
-        elif value >= 200 and value < 1130:
-            return "Tidak Sehat"
-        elif value >= 1130 and value < 2260:
-            return "Sangat Tidak Sehat"
-        else:
-            return "Berbahaya"
-            
-    elif column == 'HC':
-        if value < 45:
-            return "Baik"
-        elif value >= 45 and value < 1000:
-            return "Sedang"
-        elif value >= 1000 and value < 215:
-            return "Tidak Sehat"
-        elif value >= 215 and value < 432:
-            return "Sangat Tidak Sehat"
-        else:
-            return "Berbahaya"
-            
-    elif column == 'PM10':
-        if value < 50:
-            return "Baik"
-        elif value >= 50 and value < 150:
-            return "Sedang"
-        elif value >= 150 and value < 350:
-            return "Tidak Sehat"
-        elif value >= 350 and value < 420:
-            return "Sangat Tidak Sehat"
-        else:
-            return "Berbahaya"
-            
-    elif column == 'PM2p5':
-        if value < 15.5:
-            return "Baik"
-        elif value >= 15.5 and value < 55.4:
-            return "Sedang"
-        elif value >= 55.4 and value < 150.4:
-            return "Tidak Sehat"
-        elif value >= 150.4 and value < 250.4:
-            return "Sangat Tidak Sehat"
-        else:
-            return "Berbahaya"
-
 
 # Define custom functions to create popups with data values
 def create_popup_first(row):
     popup = '<b>Date:</b> {}<br>'.format(row['Date_Time'])
-    
     for column in df_first.columns[1:]:
-        value = row[column]
-        category = hitung_tingkat_polusi(column, value)
-        popup += '<b>{}:</b> {} ({})<br>'.format(column, value, category)
-
+        pollution_level = hitung_tingkat_polusi(column, row[column])
+        popup += '<b>{}:</b> {}<br>'.format(column, row[column], pollution_level)
     return folium.Popup(popup, max_width=300)
 
 def create_popup_second(row):
     popup = '<b>Date:</b> {}<br>'.format(row['Date_Time'])
     for column in df_second.columns[1:]:
-        popup += '<b>{}:</b> {}<br>'.format(column, row[column])
+        pollution_level = hitung_tingkat_polusi(column, row[column])
+        popup += '<b>{}:</b> {}<br>'.format(column, row[column], pollution_level)
     return folium.Popup(popup, max_width=300)
 
 # Add markers for the first and second latitude and longitude with custom popups
