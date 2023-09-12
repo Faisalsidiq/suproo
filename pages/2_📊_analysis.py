@@ -88,6 +88,27 @@ if selected_tool == 'Correlation':
     # Display the correlation line plot
     st.plotly_chart(fig)
 
+    selected_variabel1 = df[selected_variabel1]
+    df.set_index('Date_Time', inplace=True)
+    # selected_variabel1 predictions
+    title(f"Prediksi {selected_variabel1} 7 Hari Kedepan")
+    df[selected_variabel1] = pd.to_numeric(df[selected_variabel1], errors='coerce', downcast='integer')
+    selected_variabel1 = df[selected_variabel1]
+    train_size = int(len(selected_variabel1) * 0.8)
+    train, test = selected_variabel1[:train_size], selected_variabel1[train_size:]
+    p, d, q = 5, 1, 0
+    model = ARIMA(train, order=(p, d, q))
+    model_fit = model.fit()
+    # Predict selected_variabel1 values for the next 7 days
+    predictions = model_fit.forecast(steps=7)
+            
+    # Create date range for predictions
+    prediction_dates = pd.date_range(start=selected_variabel1.index[train_size], periods=len(predictions), freq='D')
+            
+    # Print selected_variabel1 predictions for each day
+    for date, prediction in zip(prediction_dates, predictions):
+        st.write(f'Tanggal: {date.date()}, Prediksi {selected_variabel1.name}: {prediction:.2f}')
+
     
     
 
@@ -99,26 +120,7 @@ if selected_tool == 'Correlation':
             # Display the correlation coefficient
             st.write("Correlation Coefficient:", correlation_coefficient)
 
-            selected_variabel1 = df[selected_variabel1]
-            df.set_index('Date_Time', inplace=True)
-            # selected_variabel1 predictions
-            title(f"Prediksi {selected_variabel1} 7 Hari Kedepan")
-            df[selected_variabel1] = pd.to_numeric(df[selected_variabel1], errors='coerce', downcast='integer')
-            selected_variabel1 = df[selected_variabel1]
-            train_size = int(len(selected_variabel1) * 0.8)
-            train, test = selected_variabel1[:train_size], selected_variabel1[train_size:]
-            p, d, q = 5, 1, 0
-            model = ARIMA(train, order=(p, d, q))
-            model_fit = model.fit()
-            # Predict selected_variabel1 values for the next 7 days
-            predictions = model_fit.forecast(steps=7)
             
-            # Create date range for predictions
-            prediction_dates = pd.date_range(start=selected_variabel1.index[train_size], periods=len(predictions), freq='D')
-            
-            # Print selected_variabel1 predictions for each day
-            for date, prediction in zip(prediction_dates, predictions):
-                st.write(f'Tanggal: {date.date()}, Prediksi {selected_variabel1.name}: {prediction:.2f}')
                     
         else:
             st.write("Not enough data for correlation calculation.")
