@@ -98,8 +98,8 @@ if selected_tool == 'Correlation':
             correlation_coefficient = correlation_df.iloc[0, 1]
             # Display the correlation coefficient
             st.write("Correlation Coefficient:", correlation_coefficient)
-            st.write(df)
 
+            selected_variabel1 = df[selected_variabel1]
             df.set_index('Date_Time', inplace=True)
             # selected_variabel1 predictions
             title(f"Prediksi {selected_variabel1} 7 Hari Kedepan")
