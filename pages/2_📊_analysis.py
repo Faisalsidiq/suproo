@@ -107,10 +107,8 @@ if selected_tool == 'Correlation':
     prediction_dates = pd.date_range(start=selected_variabel1.index[train_size], periods=len(predictions), freq='D')
     
     # Print selected_variabel1 predictions for each day
-    st.subheader(f"Prediksi {selected_variabel1} untuk 7 hari ke depan:")
     for date, prediction in zip(prediction_dates, predictions):
-        st.write(f'Tanggal: {date.date()}, Prediksi {selected_variabel1}: {prediction:.2f}')
-
+        st.write(f'Tanggal: {date.date()}, Prediksi {selected_variabel1.name}: {prediction:.2f}')
 
     # Calculate the correlation coefficient between the selected Variabel1 and Variabel2
     if not filtered_df.empty and selected_variabel1 in filtered_df.columns and selected_variabel2 in filtered_df.columns:
