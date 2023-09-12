@@ -4,7 +4,7 @@ from datetime import datetime, time
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import random
-import urllib.parse
+
 
 # Function to preprocess data
 def preprocess_value(value):
@@ -87,10 +87,7 @@ if selected_tool == 'Correlation':
             correlation_coefficient = correlation_df.iloc[0, 1]
             # Display the correlation coefficient
             st.write("Correlation Coefficient:", correlation_coefficient)
-            hasil_so2 = st.session_state.hasil_so2
-
-            # Menampilkan hasil pelatihan model SO2
-            st.write("Hasil Pelatihan Model SO2:", hasil_so2)
+            
         else:
             st.write("Not enough data for correlation calculation.")
     else:
