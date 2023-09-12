@@ -23,6 +23,12 @@ df_first['Date_Time'] = pd.to_datetime(df_first['Date_Time'])
 df_second = pd.read_csv(second_csv_url, parse_dates=[['Date', 'Time']])
 df_second['Date_Time'] = pd.to_datetime(df_second['Date_Time'])
 
+exclude_columns = ['Date', 'Time', 'Date_Time']
+
+# Convert all columns to float except the excluded ones
+df_first[df_first.columns.difference(exclude_columns)] = df_first[df_first.columns.difference(exclude_columns)].apply(pd.to_numeric, errors='coerce')
+df_second[df_second.columns.difference(exclude_columns)] = df_second[df_second.columns.difference(exclude_columns)].apply(pd.to_numeric, errors='coerce')
+
 # Get the latest rows from both datasets
 latest_row_first = df_first.iloc[-1]
 latest_row_second = df_second.iloc[-1]
