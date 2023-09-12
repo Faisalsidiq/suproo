@@ -115,13 +115,21 @@ def hitung_tingkat_polusi(pollutant_name, value):
 def create_popup_first(row):
     popup = '<b>Date:</b> {}<br>'.format(row['Date_Time'])
     for column in df_first.columns[1:]:
-        popup += '<b>{}:</b> {}<br>'.format(column, row[column])
+        pollutant_name = column
+        value = row[column]
+        category = hitung_tingkat_polusi(pollutant_name, value)
+        popup += '<b>{}:</b> {} ({})<br>'.format(pollutant_name, value, category)
+
     return folium.Popup(popup, max_width=300)
 
 def create_popup_second(row):
     popup = '<b>Date:</b> {}<br>'.format(row['Date_Time'])
-    for column in df_second.columns[1:]:
-        popup += '<b>{}:</b> {}<br>'.format(column, row[column])
+    for column in df_first.columns[1:]:
+        pollutant_name = column
+        value = row[column]
+        category = hitung_tingkat_polusi(pollutant_name, value)
+        popup += '<b>{}:</b> {} ({})<br>'.format(pollutant_name, value, category)
+
     return folium.Popup(popup, max_width=300)
 
 # Add markers for the first and second latitude and longitude with custom popups
