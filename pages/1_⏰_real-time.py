@@ -29,15 +29,11 @@ latest_row_second = df_second.iloc[-1]
 # Create a Folium map centered around a specific latitude and longitude
 m = folium.Map(location=[-7.786335507018436, 110.38799288469626], zoom_start=15)
 
-
-            
-
 # Define custom functions to create popups with data values
 def create_popup_first(row):
     popup = '<b>Date:</b> {}<br>'.format(row['Date_Time'])
     for column in df_first.columns[1:]:
-       popup += '<b>CO Level:</b> {} ({})<br>'.format(row['CO'])
-    
+        popup += '<b>{}:</b> {}<br>'.format(column, row[column])
     return folium.Popup(popup, max_width=300)
 
 def create_popup_second(row):
@@ -62,6 +58,5 @@ folium.Marker(
 # Display the map with both markers
 st.subheader("Map with Data from Both Spreadsheets")
 folium_static(m)
-
 
 
