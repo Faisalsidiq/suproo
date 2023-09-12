@@ -29,18 +29,7 @@ latest_row_second = df_second.iloc[-1]
 # Create a Folium map centered around a specific latitude and longitude
 m = folium.Map(location=[-7.786335507018436, 110.38799288469626], zoom_start=15)
 
-def hitung_tingkat_polusi(column, value):
-    if column == 'CO':
-        if value < 4000:
-            return "Baik"
-        elif value >= 4000 and value < 8000:
-            return "Sedang"
-        elif value >= 8000 and value < 30000:
-            return "Tidak Sehat"
-        elif value >= 30000 and value < 45000:
-            return "Sangat Tidak Sehat"
-        else:
-            return "Berbahaya"
+
             
 
 # Define custom functions to create popups with data values
