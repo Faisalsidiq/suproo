@@ -13,14 +13,14 @@ df['Datetime'] = pd.to_datetime(df['Date'] + ' ' + df['Time'])
 df = df.drop(['Date', 'Time'], axis=1)
 df.set_index('Datetime', inplace=True)
 
-p, d, q = 5, 1, 0
-model = ARIMA(train, order=(p, d, q))
-model_fit = model.fit()
 
 # SO2 predictions
 st.title("Prediksi SO2 dengan Model ARIMA")
 df['SO2'] = pd.to_numeric(df['SO2'], errors='coerce', downcast='integer')
 SO2 = df['SO2']
+p, d, q = 5, 1, 0
+model = ARIMA(train, order=(p, d, q))
+model_fit = model.fit()
 train_size = int(len(SO2) * 0.8)
 train, test = SO2[:train_size], SO2[train_size:]
 # Predict SO2 values for the next 7 days
@@ -39,6 +39,9 @@ for date, prediction in zip(prediction_dates, predictions):
 st.title("Prediksi CO dengan Model ARIMA")
 df['CO'] = pd.to_numeric(df['CO'], errors='coerce', downcast='integer')
 CO = df['CO']
+p, d, q = 5, 1, 0
+model = ARIMA(train, order=(p, d, q))
+model_fit = model.fit()
 train_size = int(len(CO) * 0.8)
 train, test = CO[:train_size], CO[train_size:]
 # Predict CO values for the next 7 days
@@ -57,6 +60,9 @@ for date, prediction in zip(prediction_dates, predictions):
 st.title("Prediksi O3 dengan Model ARIMA")
 df['O3'] = pd.to_numeric(df['O3'], errors='coerce', downcast='integer')
 O3 = df['O3']
+p, d, q = 5, 1, 0
+model = ARIMA(train, order=(p, d, q))
+model_fit = model.fit()
 train_size = int(len(O3) * 0.8)
 train, test = O3[:train_size], O3[train_size:]
 # Predict O3 values for the next 7 days
