@@ -79,11 +79,6 @@ if selected_tool == 'Correlation':
     
     # Display the correlation line plot
     st.plotly_chart(fig)
-
-    # Menambahkan kolom Datetime
-    df['Datetime'] = pd.to_datetime(df['Date'] + ' ' + df['Time'])
-    df.set_index('Datetime', inplace=True)
-    
     
     # selected_variabel1 predictions
     st.title("Prediksi selected_variabel1 dengan Model ARIMA")
