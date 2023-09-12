@@ -29,8 +29,8 @@ latest_row_second = df_second.iloc[-1]
 # Create a Folium map centered around a specific latitude and longitude
 m = folium.Map(location=[-7.786335507018436, 110.38799288469626], zoom_start=15)
 
-def hitung_tingkat_polusi(pollutant_name, value):
-    if pollutant_name == 'CO':
+def hitung_tingkat_polusi(column, value):
+    if column == 'CO':
         if value < 4000:
             return "Baik"
         elif value >= 4000 and value < 8000:
@@ -42,7 +42,7 @@ def hitung_tingkat_polusi(pollutant_name, value):
         else:
             return "Berbahaya"
             
-    elif pollutant_name == 'SO2':
+    elif column == 'SO2':
         if value < 52:
             return "Baik"
         elif value >= 52 and value < 180:
@@ -54,7 +54,7 @@ def hitung_tingkat_polusi(pollutant_name, value):
         else:
             return "Berbahaya"
             
-    elif pollutant_name == 'O3':
+    elif column == 'O3':
         if value < 120:
             return "Baik"
         elif value >= 120 and value < 235:
@@ -66,7 +66,7 @@ def hitung_tingkat_polusi(pollutant_name, value):
         else:
             return "Berbahaya"
             
-    elif pollutant_name == 'NO2':
+    elif column == 'NO2':
         if value < 80:
             return "Baik"
         elif value >= 80 and value < 200:
@@ -78,7 +78,7 @@ def hitung_tingkat_polusi(pollutant_name, value):
         else:
             return "Berbahaya"
             
-    elif pollutant_name == 'HC':
+    elif column == 'HC':
         if value < 45:
             return "Baik"
         elif value >= 45 and value < 1000:
@@ -90,7 +90,7 @@ def hitung_tingkat_polusi(pollutant_name, value):
         else:
             return "Berbahaya"
             
-    elif pollutant_name == 'PM10':
+    elif column == 'PM10':
         if value < 50:
             return "Baik"
         elif value >= 50 and value < 150:
@@ -102,7 +102,7 @@ def hitung_tingkat_polusi(pollutant_name, value):
         else:
             return "Berbahaya"
             
-    elif pollutant_name == 'PM2p5':
+    elif column == 'PM2p5':
         if value < 15.5:
             return "Baik"
         elif value >= 15.5 and value < 55.4:
@@ -120,10 +120,9 @@ def create_popup_first(row):
     popup = '<b>Date:</b> {}<br>'.format(row['Date_Time'])
     
     for column in df_first.columns[1:]:
-        pollutant_name = column
         value = row[column]
-        category = hitung_tingkat_polusi(pollutant_name, value)
-        popup += '<b>{}:</b> {} ({})<br>'.format(pollutant_name, value, category)
+        category = hitung_tingkat_polusi(column, value)
+        popup += '<b>{}:</b> {} ({})<br>'.format(column, value, category)
 
     return folium.Popup(popup, max_width=300)
 
