@@ -130,11 +130,7 @@ def create_popup_second(row):
 
 
 # Add markers for the first and second latitude and longitude with custom popups
-folium.Marker(
-    location=[-7.776015, 110.374410],
-    popup=create_popup_first(latest_row_first),
-    icon=folium.Icon(color="blue"),
-).add_to(m)
+
 
 folium.Marker(
     location=[-7.786335507018436, 110.38799288469626],
