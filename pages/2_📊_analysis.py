@@ -4,6 +4,8 @@ from datetime import datetime, time
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import random
+from statsmodels.tsa.arima_model import ARIMA
+
 
 
 # Function to preprocess data
