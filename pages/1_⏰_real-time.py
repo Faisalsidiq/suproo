@@ -121,10 +121,14 @@ def create_popup_first(row):
         popup += '<b>{}:</b> {}<br>'.format(column, row[column])
     return folium.Popup(popup, max_width=300)
 
+
+
 def create_popup_second(row):
     popup = '<b>Date:</b> {}<br>'.format(row['Date_Time'])
     for column in df_second.columns[1:]:
-        popup += '<b>{}:</b> {}<br>'.format(column, row[column])
+        value = row[column]
+        pollutant_category = hitung_tingkat_polusi(column, value)
+        popup += '<b>{}:</b> {} ({})<br>'.format(column, value, pollutant_category)
     return folium.Popup(popup, max_width=300)
 
 
