@@ -80,9 +80,8 @@ if selected_tool == 'Correlation':
     # Display the correlation line plot
     st.plotly_chart(fig)
     
-    # selected_variabel1 predictions
+    # ARIMA predictions for selected_variabel1
     st.title("Prediksi selected_variabel1 dengan Model ARIMA")
-    df[selected_variabel1] = pd.to_numeric(df[selected_variabel1], errors='coerce', downcast='integer')
     selected_variabel1 = df[selected_variabel1]
     train_size = int(len(selected_variabel1) * 0.8)
     train, test = selected_variabel1[:train_size], selected_variabel1[train_size:]
