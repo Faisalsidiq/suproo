@@ -124,7 +124,7 @@ def create_popup_first(row):
 
 def create_popup_second(row):
     popup = '<b>Date:</b> {}<br>'.format(row['Date_Time'])
-    for column in df_first.columns[1:]:
+    for column in df_second.columns[1:]:
         pollutant_name = column
         value = row[column]
         category = hitung_tingkat_polusi(pollutant_name, value)
