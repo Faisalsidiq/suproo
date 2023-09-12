@@ -110,8 +110,6 @@ if selected_tool == 'Correlation':
     st.subheader(f"Prediksi {selected_variabel1} untuk 7 hari ke depan:")
     for date, prediction in zip(prediction_dates, predictions):
         st.write(f'Tanggal: {date.date()}, Prediksi {selected_variabel1}: {prediction:.2f}')
-        
-  
 
 
     # Calculate the correlation coefficient between the selected Variabel1 and Variabel2
