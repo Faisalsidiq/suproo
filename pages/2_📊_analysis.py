@@ -88,10 +88,9 @@ if selected_tool == 'Correlation':
     # Display the correlation line plot
     st.plotly_chart(fig)
 
-    selected_variabel1 = df[selected_variabel1]
     df.set_index('Date_Time', inplace=True)
     # selected_variabel1 predictions
-    title(f"Prediksi {selected_variabel1} 7 Hari Kedepan")
+    st.title(f"Prediksi {selected_variabel1} 7 Hari Kedepan")
     df[selected_variabel1] = pd.to_numeric(df[selected_variabel1], errors='coerce', downcast='integer')
     selected_variabel1 = df[selected_variabel1]
     train_size = int(len(selected_variabel1) * 0.8)
