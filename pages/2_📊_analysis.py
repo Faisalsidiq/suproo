@@ -32,6 +32,73 @@ else:
     csv_url = "https://docs.google.com/spreadsheets/d/1evsslVMH2fx8EUEjDqS0PA0JzBsSdo1jVG4ddmq4dE4/export?format=csv"
     df = load_and_preprocess_data(csv_url)
 
+
+# SO2 predictions
+st.title("Prediksi SO2 dengan Model ARIMA")
+df['SO2'] = pd.to_numeric(df['SO2'], errors='coerce', downcast='integer')
+SO2 = df['SO2']
+train_size = int(len(SO2) * 0.8)
+train, test = SO2[:train_size], SO2[train_size:]
+p, d, q = 5, 1, 0
+model = ARIMA(train, order=(p, d, q))
+model_fit = model.fit()
+# Predict SO2 values for the next 7 days
+predictions = model_fit.forecast(steps=7)
+
+# Create date range for predictions
+prediction_dates = pd.date_range(start=SO2.index[train_size], periods=len(predictions), freq='D')
+
+# Print SO2 predictions for each day
+st.subheader("Prediksi SO2 untuk 7 hari ke depan:")
+for date, prediction in zip(prediction_dates, predictions):
+    st.write(f'Tanggal: {date.date()}, Prediksi SO2: {prediction:.2f}')
+
+
+# CO predictions
+st.title("Prediksi CO dengan Model ARIMA")
+df['CO'] = pd.to_numeric(df['CO'], errors='coerce', downcast='integer')
+CO = df['CO']
+train_size = int(len(CO) * 0.8)
+train, test = CO[:train_size], CO[train_size:]
+p, d, q = 5, 1, 0
+model = ARIMA(train, order=(p, d, q))
+model_fit = model.fit()
+# Predict CO values for the next 7 days
+predictions = model_fit.forecast(steps=7)
+
+# Create date range for predictions
+prediction_dates = pd.date_range(start=CO.index[train_size], periods=len(predictions), freq='D')
+
+# Print CO predictions for each day
+st.subheader("Prediksi CO untuk 7 hari ke depan:")
+for date, prediction in zip(prediction_dates, predictions):
+    st.write(f'Tanggal: {date.date()}, Prediksi CO: {prediction:.2f}')
+
+
+# O3 predictions
+st.title("Prediksi O3 dengan Model ARIMA")
+df['O3'] = pd.to_numeric(df['O3'], errors='coerce', downcast='integer')
+O3 = df['O3']
+
+train_size = int(len(O3) * 0.8)
+train, test = O3[:train_size], O3[train_size:]
+p, d, q = 5, 1, 0
+model = ARIMA(train, order=(p, d, q))
+model_fit = model.fit()
+# Predict O3 values for the next 7 days
+predictions = model_fit.forecast(steps=7)
+
+# Create date range for predictions
+prediction_dates = pd.date_range(start=O3.index[train_size], periods=len(predictions), freq='D')
+
+# Print O3 predictions for each day
+st.subheader("Prediksi O3 untuk 7 hari ke depan:")
+for date, prediction in zip(prediction_dates, predictions):
+    st.write(f'Tanggal: {date.date()}, Prediksi O3: {prediction:.2f}')
+    
+    
+
+
 st.title('Air Pollution Data Analysis')
 
 # Display tools content
@@ -82,25 +149,7 @@ if selected_tool == 'Correlation':
     # Display the correlation line plot
     st.plotly_chart(fig)
     
-    # ARIMA predictions for selected_variabel1
-    st.title("Prediksi selected_variabel1 dengan Model ARIMA")
-    selected_variabel1 = df[selected_variabel1]
-    train_size = int(len(selected_variabel1) * 0.8)
-    train, test = selected_variabel1[:train_size], selected_variabel1[train_size:]
-    p, d, q = 5, 1, 0
-    model = ARIMA(train, order=(p, d, q))
-    model_fit = model.fit()
-    # Predict selected_variabel1 values for the next 7 days
-    predictions = model_fit.forecast(steps=7)
-    
-    # Create date range for predictions
-    prediction_dates = pd.date_range(start=selected_variabel1.index[train_size], periods=len(predictions), freq='D')
-    
-    # Print selected_variabel1 predictions for each day
-    st.subheader("Prediksi selected_variabel1 untuk 7 hari ke depan:")
-    for date, prediction in zip(prediction_dates, predictions):
-        st.write(f'Tanggal: {date.date()}, Prediksi selected_variabel1: {prediction:.2f}')
-
+  
 
 
     # Calculate the correlation coefficient between the selected Variabel1 and Variabel2
