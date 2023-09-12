@@ -115,6 +115,7 @@ def hitung_tingkat_polusi(pollutant_name, value):
 def create_popup_first(row):
     popup = '<b>Date:</b> {}<br>'.format(row['Date_Time'])
     for column in df_first.columns[1:]:
+        df_first[column] = df_first[column].astype(float) 
         pollutant_name = column
         value = row[column]
         category = hitung_tingkat_polusi(pollutant_name, value)
