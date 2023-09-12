@@ -114,6 +114,7 @@ def hitung_tingkat_polusi(pollutant_name, value):
         else:
             return "Berbahaya"
 
+
 # Define custom functions to create popups with data values
 def create_popup_first(row):
     popup = '<b>Date:</b> {}<br>'.format(row['Date_Time'])
